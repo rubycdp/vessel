@@ -1,19 +1,24 @@
-# Vessel - high-level web crawling framework
-
-## Installation
-
-```ruby
-gem install "vessel"
-```
-
-## Example
-
-```ruby
 require "vessel"
+
+class Debug1 < Vessel::Middleware
+  def call(item)
+    puts "Debug1"
+    middleware.call(item)
+  end
+end
+
+class Debug2 < Vessel::Middleware
+  def call(item)
+    puts "Debug2"
+    puts item
+  end
+end
 
 class BlogScrapinghubCom < Vessel::Cargo
   domain "blog.scrapinghub.com"
   start_urls "https://blog.scrapinghub.com"
+  threads max: 2
+  middleware Debug1, Debug2
 
   def parse
     css(".post-header>h2>a").each do |a|
@@ -29,6 +34,9 @@ class BlogScrapinghubCom < Vessel::Cargo
     yield browser.title
   end
 end
-```
 
 BlogScrapinghubCom.run
+
+# BlogScrapinghubCom.run do |data|
+#   puts data
+# end
