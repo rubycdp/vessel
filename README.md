@@ -10,6 +10,8 @@ gem "vessel"
 
 ## Example
 
+Run 1 page per core by default or add `threads max: n` to a class.
+
 ```ruby
 require "vessel"
 
