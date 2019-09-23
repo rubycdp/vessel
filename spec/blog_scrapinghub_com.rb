@@ -17,7 +17,8 @@ end
 class BlogScrapinghubCom < Vessel::Cargo
   domain "blog.scrapinghub.com"
   start_urls "https://blog.scrapinghub.com"
-  threads max: 2
+  # threads max: 2
+  timeout 20
   middleware Debug1, Debug2
 
   def parse

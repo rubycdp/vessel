@@ -27,6 +27,10 @@ module Vessel
       settings[:delay] = value
     end
 
+    def timeout(value)
+      settings[:timeout] = value
+    end
+
     def threads(min: MIN_THREADS, max: MAX_THREADS)
       settings[:min_threads] = min
       settings[:max_threads] = max

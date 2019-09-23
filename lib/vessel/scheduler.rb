@@ -11,6 +11,8 @@ module Vessel
     def initialize(queue, settings)
       delay = settings[:delay]
       min_threads = settings[:min_threads]
+      @timeout = settings[:timeout]
+      @options = @timeout ? { timeout: @timeout } : {}
       @max_threads = settings[:max_threads]
       @queue, @delay = queue, delay
       @executor = Concurrent::ThreadPoolExecutor.new(
@@ -30,7 +32,7 @@ module Vessel
       Concurrent::Promises.future_on(@executor, @queue, request) do |queue, request|
         begin
           puts "request start #{request.url}"
-          browser = Ferrum::Browser.new
+          browser = Ferrum::Browser.new(**@options)
           sleep(@delay) if @max_threads == 1 && @delay > 0
           browser.goto(request.url)
           puts "request   end #{request.url}"
