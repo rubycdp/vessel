@@ -1,18 +1,3 @@
-# Vessel - high-level web crawling framework
-
-## Installation
-
-Add this to your Gemfile:
-
-```ruby
-gem "vessel"
-```
-
-## Example
-
-```ruby
-require "vessel"
-
 class BlogScrapinghubCom < Vessel::Cargo
   domain "blog.scrapinghub.com"
   start_urls "https://blog.scrapinghub.com"
@@ -31,6 +16,3 @@ class BlogScrapinghubCom < Vessel::Cargo
     yield page.title
   end
 end
-
-BlogScrapinghubCom.run { |title| puts title }
-```

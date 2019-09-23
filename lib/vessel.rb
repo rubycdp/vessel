@@ -1,6 +1,14 @@
+# frozen_string_literal: true
+
+require "vessel/engine"
+require "vessel/middleware"
+require "vessel/scheduler"
+require "vessel/request"
+require "vessel/settings"
 require "vessel/version"
+require "vessel/cargo"
 
 module Vessel
   class Error < StandardError; end
-  # Your code goes here...
+  class NotImplementedError < Error; end
 end

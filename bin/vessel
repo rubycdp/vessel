@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require "vessel"
+Vessel::CLI.start(ARGV)
