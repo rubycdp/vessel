@@ -2,8 +2,8 @@
 
 module Vessel
   class Engine
-    def self.run(*args)
-      new(*args).tap(&:run)
+    def self.run(*args, &block)
+      new(*args, &block).tap(&:run)
     end
 
     attr_reader :crawler_class, :settings, :scheduler, :middleware
@@ -11,7 +11,7 @@ module Vessel
     def initialize(klass, &block)
       @crawler_class = klass
       @settings = klass.settings
-      @middleware = block || Middleware.build(settings[:middleware])
+      @middleware = block || Middleware.build(*settings[:middleware])
       @queue = SizedQueue.new(settings[:max_threads])
       @scheduler = Scheduler.new(@queue, settings)
     end
@@ -28,12 +28,12 @@ module Vessel
     end
 
     def handle(page, request)
-      crawler = @crawler_class.new(@settings[:domain], page)
+      crawler = @crawler_class.new(page)
       crawler.send(request.method) do |object|
         if object.is_a?(Request)
           scheduler.post(object)
         else
-          @middleware.call(object)
+          @middleware&.call(object)
         end
       end
     ensure
