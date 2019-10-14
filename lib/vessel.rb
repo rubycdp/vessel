@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
+require "concurrent-ruby"
 require "vessel/engine"
 require "vessel/middleware"
 require "vessel/scheduler"
 require "vessel/request"
-require "vessel/settings"
 require "vessel/version"
 require "vessel/cargo"
 

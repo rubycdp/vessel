@@ -40,6 +40,9 @@ module Vessel
 
     def goto(request)
       page = browser.create_page
+      # Delay is set between requests when we don't want to bombard server with
+      # requests so it requires crawler to be single threaded. Otherwise doesn't
+      # make sense.
       sleep(delay) if @max_threads == 1 && delay > 0
       page.goto(request.url)
       [page, request]
