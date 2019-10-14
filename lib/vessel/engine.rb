@@ -29,11 +29,11 @@ module Vessel
 
     def handle(page, request)
       crawler = @crawler_class.new(page)
-      crawler.send(request.method) do |object|
-        if object.is_a?(Request)
-          scheduler.post(object)
+      crawler.send(request.method) do |*args|
+        if args.all? { |i| i.is_a?(Request) }
+          scheduler.post(*args)
         else
-          @middleware&.call(object)
+          @middleware&.call(*args)
         end
       end
     ensure
