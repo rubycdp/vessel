@@ -8,6 +8,7 @@ from websites. It can be used in a wide range of scenarios, like data mining,
 monitoring or historical archival. For automated testing we recommend
 [Cuprite](https://github.com/rubycdp/cuprite).
 
+
 ## Install
 
 Add this to your Gemfile:
@@ -15,6 +16,7 @@ Add this to your Gemfile:
 ```ruby
 gem "vessel"
 ```
+
 
 ## A look around
 
@@ -67,6 +69,7 @@ pool to work with all your requests with one page per core by default or add
 them to Chrome which will load pages in parallel. Thus crawler is lightweight
 and speedy.
 
+
 ## Settings
 
 * domain
@@ -76,6 +79,7 @@ and speedy.
 * threads
 * middleware
 
+
 ## Selectors
 
 * at_css
@@ -83,6 +87,31 @@ and speedy.
 * at_xpath
 * xpath
 
+
 ## Middleware
 
 To be continued
+
+
+## License
+
+Copyright 2018-2020 Machinio
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
