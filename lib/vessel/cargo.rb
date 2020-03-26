@@ -78,5 +78,9 @@ module Vessel
     def request(**options)
       Request.new(**options)
     end
+
+    def absolute_url(relative)
+      Addressable::URI.join(page.current_url, relative).to_s
+    end
   end
 end
