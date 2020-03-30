@@ -8,6 +8,8 @@ from websites. It can be used in a wide range of scenarios, like data mining,
 monitoring or historical archival. For automated testing we recommend
 [Cuprite](https://github.com/rubycdp/cuprite).
 
+Thanks to Evrone [design team](https://evrone.com/design?utm_source=github&utm_campaign=vessel). Read about [Vessel](https://evrone.com/vessel-framework?utm_source=github&utm_campaign=vessel) & other projects supported by Evrone [here](https://evrone.com/cases?utm_source=github&utm_campaign=vessel#open-source).
+
 
 ## Install
 
