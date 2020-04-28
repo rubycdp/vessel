@@ -15,7 +15,7 @@ module Vessel
       @min_threads, @max_threads, @delay =
         settings.values_at(:min_threads, :max_threads, :delay)
 
-      options = {}
+      options = settings[:ferrum]
       options.merge!(timeout: settings[:timeout]) if settings[:timeout]
       @browser = Ferrum::Browser.new(**options)
     end

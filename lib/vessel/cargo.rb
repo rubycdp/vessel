@@ -44,6 +44,10 @@ module Vessel
         settings[:middleware] = classes
       end
 
+      def ferrum(**options)
+        settings[:ferrum] = options
+      end
+
       def settings
         @settings ||= {
           delay: DELAY,
@@ -51,6 +55,7 @@ module Vessel
           start_urls: START_URLS,
           min_threads: MIN_THREADS,
           max_threads: MAX_THREADS,
+          ferrum: Hash.new,
           domain: name&.split('::')&.last&.downcase
         }
       end
