@@ -48,6 +48,10 @@ module Vessel
         settings[:ferrum] = options
       end
 
+      def intercept(&block)
+        settings[:intercept] = block
+      end
+
       def settings
         @settings ||= {
           delay: DELAY,
@@ -56,6 +60,7 @@ module Vessel
           min_threads: MIN_THREADS,
           max_threads: MAX_THREADS,
           ferrum: Hash.new,
+          intercept: nil,
           domain: name&.split('::')&.last&.downcase
         }
       end

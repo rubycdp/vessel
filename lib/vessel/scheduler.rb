@@ -18,6 +18,11 @@ module Vessel
       options = settings[:ferrum]
       options.merge!(timeout: settings[:timeout]) if settings[:timeout]
       @browser = Ferrum::Browser.new(**options)
+
+      if settings[:intercept]
+        @browser.network.intercept
+        @browser.on(:request, &settings[:intercept])
+      end
     end
 
     def post(*requests)

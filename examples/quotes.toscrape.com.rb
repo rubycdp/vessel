@@ -5,6 +5,15 @@ class QuotesToScrapeCom < Vessel::Cargo
   domain "quotes.toscrape.com"
   start_urls "http://quotes.toscrape.com/tag/humor/"
   ferrum browser_options: { "ignore-certificate-errors" => nil }
+  intercept do |request|
+    if request.match?(/bla-bla/)
+      request.abort
+    elsif request.match?(/lorem/)
+      request.respond(body: "Lorem ipsum")
+    else
+      request.continue
+    end
+  end
 
   def parse
     css("div.quote").each do |quote|
