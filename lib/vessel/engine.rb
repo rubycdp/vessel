@@ -29,7 +29,9 @@ module Vessel
 
     def handle(page, request)
       crawler = @crawler_class.new(page)
-      crawler.send(request.method) do |*args|
+      args = [request.method, request.data].compact
+
+      crawler.send(*args) do |*args|
         if args.all? { |i| i.is_a?(Request) }
           scheduler.post(*args)
         else
