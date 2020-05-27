@@ -24,7 +24,7 @@ module Vessel
       end
 
       def start_urls(*urls)
-        settings[:start_urls] = urls
+        settings[:start_urls] = urls.flatten
       end
 
       def delay(value)
