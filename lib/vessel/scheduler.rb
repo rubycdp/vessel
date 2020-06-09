@@ -44,6 +44,8 @@ module Vessel
     end
 
     def goto(request)
+      return [nil, request] if request.stub?
+
       page = browser.create_page
       # Delay is set between requests when we don't want to bombard server with
       # requests so it requires crawler to be single threaded. Otherwise doesn't

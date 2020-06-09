@@ -21,25 +21,28 @@ module Vessel
 
       until @queue.closed?
         message = @queue.pop
+
         raise(message) if message.is_a?(Exception)
-        handle(*message)
+
+        page, request = message
+        args = [request.method, request.data].compact
+        handle(page, args)
+
         @queue.close if idle?
       end
     end
 
-    def handle(page, request)
+    def handle(page, args)
       crawler = @crawler_class.new(page)
-      args = [request.method, request.data].compact
-
-      crawler.send(*args) do |*args|
-        if args.all? { |i| i.is_a?(Request) }
-          scheduler.post(*args)
+      crawler.send(*args) do |*result|
+        if result.all? { |i| i.is_a?(Request) }
+          scheduler.post(*result)
         else
-          @middleware&.call(*args)
+          @middleware&.call(*result)
         end
       end
     ensure
-      page.close
+      page.close if page
     end
 
     def start_requests
