@@ -45,6 +45,8 @@ module Vessel
       page.close if page
     end
 
+    private
+
     def start_requests
       Request.build(*settings[:start_urls])
     end
