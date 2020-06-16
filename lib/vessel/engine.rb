@@ -30,6 +30,9 @@ module Vessel
 
         @queue.close if idle?
       end
+
+    ensure
+      scheduler.stop
     end
 
     def handle(page, args)
