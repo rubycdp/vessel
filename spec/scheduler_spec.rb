@@ -47,5 +47,37 @@ module Vessel
       end
     end
 
+    describe '#stop' do
+      let(:browser) { spy('Ferrum::Browser') }
+      let(:pool) { spy('ThreadPoolExecutor') }
+
+      before do
+        scheduler.instance_variable_set(:@browser, browser)
+        scheduler.instance_variable_set(:@pool, pool)
+      end
+
+      it 'attempts to shut down the thread pool' do
+        scheduler.stop
+
+        expect( pool ).to have_received(:shutdown)
+        expect( pool ).not_to have_received(:kill)
+      end
+
+      it 'kills the thread pool if necessary' do
+        allow( pool ).to receive(:wait_for_termination).and_return(false)
+
+        scheduler.stop
+
+        expect( pool ).to have_received(:shutdown)
+        expect( pool ).to have_received(:kill)
+      end
+
+      it 'quits the browser' do
+        scheduler.stop
+
+        expect( scheduler.browser ).to have_receive(:quit)
+      end
+    end
+
   end
 end

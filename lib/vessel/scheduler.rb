@@ -33,6 +33,12 @@ module Vessel
       end
     end
 
+    def stop
+      pool.shutdown
+      pool.kill unless pool.wait_for_termination(30)
+      browser.quit
+    end
+
     private
 
     def pool
