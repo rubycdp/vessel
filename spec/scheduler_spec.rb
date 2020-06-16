@@ -16,6 +16,12 @@ module Vessel
       expect( scheduler.browser ).to be_a(Ferrum::Browser)
     end
 
+    it 'has thread pool statistics' do
+      expect( scheduler.scheduled_task_count ).to eq(0)
+      expect( scheduler.completed_task_count ).to eq(0)
+      expect( scheduler.queue_length ).to eq(0)
+    end
+
     describe '#post' do
       let(:request) { Vessel::Request.new } # empty request stub
 
