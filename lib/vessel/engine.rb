@@ -30,6 +30,9 @@ module Vessel
 
         @queue.close if idle?
       end
+
+    ensure
+      scheduler.stop
     end
 
     def handle(page, args)
@@ -44,6 +47,8 @@ module Vessel
     ensure
       page.close if page
     end
+
+    private
 
     def start_requests
       Request.build(*settings[:start_urls])

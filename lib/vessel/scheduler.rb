@@ -6,7 +6,7 @@ require "concurrent-ruby"
 module Vessel
   class Scheduler
     extend Forwardable
-    delegate %i[scheduled_task_count completed_task_count queue_length] => :@pool
+    delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
     attr_reader :browser, :queue, :delay
 
@@ -31,6 +31,12 @@ module Vessel
           queue << goto(request)
         end
       end
+    end
+
+    def stop
+      pool.shutdown
+      pool.kill unless pool.wait_for_termination(30)
+      browser.quit
     end
 
     private
