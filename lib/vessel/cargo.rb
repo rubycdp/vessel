@@ -97,5 +97,9 @@ module Vessel
     def absolute_url(relative)
       Addressable::URI.join(page.current_url, relative).to_s
     end
+
+    def current_url
+      Addressable::URI.parse(page.current_url)
+    end
   end
 end
