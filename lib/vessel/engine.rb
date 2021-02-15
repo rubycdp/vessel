@@ -38,8 +38,8 @@ module Vessel
     def handle(page, args)
       crawler = @crawler_class.new(page)
       crawler.send(*args) do |*result|
-        if result.all? { |i| i.is_a?(Request) }
-          scheduler.post(*result)
+        if result.flatten.all? { |i| i.is_a?(Request) }
+          scheduler.post(*result.flatten)
         else
           @middleware&.call(*result)
         end
