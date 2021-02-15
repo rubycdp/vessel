@@ -5,6 +5,7 @@ class QuotesToScrapeCom < Vessel::Cargo
   domain "quotes.toscrape.com"
   start_urls "http://quotes.toscrape.com/tag/humor/"
   ferrum browser_options: { "ignore-certificate-errors" => nil }
+  headers "User-Agent" => "Browser"
   intercept do |request|
     if request.match?(/bla-bla/)
       request.abort

@@ -8,12 +8,12 @@ module Vessel
     extend Forwardable
     delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
-    attr_reader :browser, :queue, :delay
+    attr_reader :browser, :queue, :delay, :headers
 
     def initialize(queue, settings)
       @queue = queue
-      @min_threads, @max_threads, @delay =
-        settings.values_at(:min_threads, :max_threads, :delay)
+      @min_threads, @max_threads, @delay, @headers =
+        settings.values_at(:min_threads, :max_threads, :delay, :headers)
 
       options = settings[:ferrum]
       options.merge!(timeout: settings[:timeout]) if settings[:timeout]
@@ -53,6 +53,7 @@ module Vessel
       return [nil, request] if request.stub?
 
       page = browser.create_page
+      page.headers.set(headers) if headers
       # Delay is set between requests when we don't want to bombard server with
       # requests so it requires crawler to be single threaded. Otherwise doesn't
       # make sense.

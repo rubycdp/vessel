@@ -35,6 +35,10 @@ module Vessel
         settings[:timeout] = value
       end
 
+      def headers(value)
+        settings[:headers] = value
+      end
+
       def threads(min: MIN_THREADS, max: MAX_THREADS)
         settings[:min_threads] = min
         settings[:max_threads] = max
@@ -61,6 +65,7 @@ module Vessel
           max_threads: MAX_THREADS,
           ferrum: Hash.new,
           intercept: nil,
+          headers: nil,
           domain: name&.split('::')&.last&.downcase
         }
       end
