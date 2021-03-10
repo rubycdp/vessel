@@ -80,7 +80,15 @@ and speedy.
 * timeout
 * threads
 * middleware
+* ferrum
 
+### Headful mode
+
+You can disable headless mode by passing `ferrum` settings:
+
+```ruby
+MyScraper.run(ferrum: { headless: false })
+```
 
 ## Selectors
 
