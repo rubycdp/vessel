@@ -61,7 +61,7 @@ module Vessel
       page.goto(request.url)
       [page, request]
     rescue => e
-      e
+      [page, request, e]
     end
   end
 end

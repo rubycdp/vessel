@@ -29,6 +29,10 @@ class QuotesToScrapeCom < Vessel::Cargo
       yield request(url: url, method: :parse)
     end
   end
+
+  def on_error(request, error)
+    raise error
+  end
 end
 
 quotes = []

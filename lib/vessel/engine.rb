@@ -21,13 +21,8 @@ module Vessel
 
       until @queue.closed?
         message = @queue.pop
-
-        raise(message) if message.is_a?(Exception)
-
-        page, request = message
-        args = [request.method, request.data].compact
-        handle(page, args)
-
+        page, request, error = message
+        handle(page, request, error)
         @queue.close if idle?
       end
 
@@ -35,8 +30,13 @@ module Vessel
       scheduler.stop
     end
 
-    def handle(page, args)
+    def handle(page, request, error)
       crawler = @crawler_class.new(page)
+
+      raise(error) if error && !crawler.respond_to?(:on_error)
+
+      args = error ? [:on_error, request, error] : [request.method, request.data].compact
+
       crawler.send(*args) do |*result|
         if result.flatten.all? { |i| i.is_a?(Request) }
           scheduler.post(*result.flatten)
