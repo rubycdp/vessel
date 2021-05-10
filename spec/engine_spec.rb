@@ -43,7 +43,17 @@ describe Vessel::Engine do
     it 'handles pages found in queue' do
       engine.run
 
-      expect( engine ).to have_received(:handle).with(page, [request.method])
+      expect( engine ).to have_received(:handle).with(page, request, nil)
+    end
+
+    it 'handles errors found in queue' do
+      engine.scheduler.queue.clear
+      error = double('error')
+      engine.scheduler.queue << [page, request, error]
+
+      engine.run
+
+      expect( engine ).to have_received(:handle).with(page, request, error)
     end
 
     it 'stops the scheduler when done' do
@@ -52,14 +62,11 @@ describe Vessel::Engine do
       expect( engine.scheduler ).to have_received(:stop)
     end
 
-    it 're-raises exception found in queue' do
-      engine.scheduler.queue << (error = StandardError.new)
-
-      expect { engine.run }.to raise_error(error)
-    end
-
     it 'ensures the scheduler is stopped' do
-      engine.scheduler.queue << (error = StandardError.new)
+      error = StandardError.new
+      allow(engine).to receive(:handle).and_raise(error)
+      engine.scheduler.queue << [page, request, error]
+
       expect { engine.run }.to raise_error(error)
       expect( engine.scheduler ).to have_received(:stop)
     end
@@ -70,6 +77,7 @@ describe Vessel::Engine do
     let(:page)    { double(Ferrum::Page) }
     let(:result)  { double('Crawler#parse result') }
     let(:request) { Vessel::Request.new }
+    let(:error)   { nil }
 
     before do
       allow(crawler_class).to receive(:new).and_return(crawler)
@@ -77,26 +85,48 @@ describe Vessel::Engine do
       allow(engine.middleware).to receive(:call)
       allow(engine.scheduler).to receive(:post)
       allow(page).to receive(:close)
-
-      engine.handle(page, [:parse])
     end
 
     it 'creates a new crawler instance and calls #parse to process the page' do
+      engine.handle(page, request, error)
+
       expect( crawler_class ).to have_received(:new).with(page)
       expect( crawler ).to have_received(:parse)
     end
 
     it 'calls block handler or middleware with #parse results' do
+      engine.handle(page, request, error)
+
       expect( engine.middleware ).to have_received(:call).with(result)
     end
 
     it 'schedules new requests emitted by #parse' do
+      engine.handle(page, request, error)
+
       expect( engine.scheduler ).to have_received(:post).with(request)
     end
 
     it 'closes the page when done' do
+      engine.handle(page, request, error)
+
       expect( page ).to have_received(:close)
     end
-  end
 
+    describe 'with error' do
+      let(:error) { StandardError.new }
+      describe 'and crawler on_error defined' do
+        it 'forwards error to crawler on_error' do
+          allow(crawler).to receive(:on_error)
+          engine.handle(page, request, error)
+
+          expect( crawler ).to have_received(:on_error).with(request, error)
+        end
+      end
+      describe 'and no crawler on_error defined' do
+        it 're-raises the error' do
+          expect { engine.handle(page, request, error) }.to raise_exception error
+        end
+      end
+    end
+  end
 end
