@@ -76,11 +76,21 @@ and speedy.
 
 * domain
 * start_urls
+* [headers](https://github.com/rubycdp/vessel#headers)
 * delay
 * timeout
 * threads
 * middleware
 * ferrum
+
+### Headers
+
+```ruby
+class MyScraper < Vessel::Cargo
+  headers "Content-Type" => "text/plain",
+          "Referer" => "http://example.com"
+end
+```
 
 ### Headful mode
 
