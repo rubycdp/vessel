@@ -6,7 +6,7 @@ require "forwardable"
 module Vessel
   class Cargo
     DELAY = 0
-    START_URLS = [].freeze
+    URL_HANDLERS = {}.freeze
     MIDDLEWARE = [].freeze
     MIN_THREADS = 1
     MAX_THREADS = Concurrent.processor_count
@@ -24,7 +24,13 @@ module Vessel
       end
 
       def start_urls(*urls)
-        settings[:start_urls] = urls.flatten
+        settings[:url_handlers] = urls.compact.flatten.inject({}) do |options, url|
+          options.merge(url => Request::DEFAULT_HANDLER)
+        end
+      end
+
+      def start_with(options)
+        settings[:url_handlers] = options
       end
 
       def delay(value)
@@ -60,7 +66,7 @@ module Vessel
         @settings ||= {
           delay: DELAY,
           middleware: MIDDLEWARE,
-          start_urls: START_URLS,
+          url_handlers: URL_HANDLERS,
           min_threads: MIN_THREADS,
           max_threads: MAX_THREADS,
           ferrum: Hash.new,

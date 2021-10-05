@@ -35,7 +35,7 @@ module Vessel
 
       raise(error) if error && !crawler.respond_to?(:on_error)
 
-      args = error ? [:on_error, request, error] : [request.method, request.data].compact
+      args = error ? [:on_error, request, error] : [request.handler, request.data].compact
 
       crawler.send(*args) do |*result|
         if result.flatten.all? { |i| i.is_a?(Request) }
@@ -51,7 +51,7 @@ module Vessel
     private
 
     def start_requests
-      Request.build(*settings[:start_urls])
+      Request.build(settings[:url_handlers])
     end
 
     def idle?

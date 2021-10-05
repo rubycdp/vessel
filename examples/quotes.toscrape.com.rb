@@ -26,7 +26,7 @@ class QuotesToScrapeCom < Vessel::Cargo
 
     if next_page = at_xpath("//li[@class='next']/a[@href]")
       url = absolute_url(next_page.attribute(:href))
-      yield request(url: url, method: :parse)
+      yield request(url: url, handler: :parse)
     end
   end
 

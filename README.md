@@ -43,7 +43,7 @@ class QuotesToScrapeCom < Vessel::Cargo
 
     if next_page = at_xpath("//li[@class='next']/a[@href]")
       url = absolute_url(next_page.attribute(:href))
-      yield request(url: url, method: :parse)
+      yield request(url: url, handler: :parse)
     end
   end
 end
@@ -59,11 +59,11 @@ When this finishes you will have a list of the quotes in JSON format in the
 
 How it all works? First Vessel using Ferrum spawns Chrome which goes to one or
 more urls in `start_urls`, in our case it's only one. After Chrome reports back
-that page is loaded with all the resources it needs the first default callback
-`parse` is invoked. In the parse callback, we loop through the quote elements
+that page is loaded with all the resources it needs the first default handler
+`parse` is invoked. In the parse handler, we loop through the quote elements
 using a CSS Selector, yield a Hash with the extracted quote text and author and
 look for a link to the next page and schedule another request using the same
-parse method as callback.
+parse method as a handler.
 
 Notice that all requests are scheduled and handled concurrently. We use thread
 pool to work with all your requests with one page per core by default or add
@@ -76,6 +76,7 @@ and speedy.
 
 * domain
 * start_urls
+* start_with
 * [headers](https://github.com/rubycdp/vessel#headers)
 * delay
 * timeout

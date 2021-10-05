@@ -4,11 +4,11 @@ class BlogScrapinghubCom < Vessel::Cargo
 
   def parse
     css(".post-header>h2>a").each do |a|
-      yield request(url: a.attribute(:href), method: :parse_article)
+      yield request(url: a.attribute(:href), handler: :parse_article)
     end
 
     css("a.next-posts-link").each do |a|
-      yield request(url: a.attribute(:href), method: :parse)
+      yield request(url: a.attribute(:href), handler: :parse)
     end
   end
 
