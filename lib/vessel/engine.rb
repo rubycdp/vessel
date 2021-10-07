@@ -51,7 +51,7 @@ module Vessel
     private
 
     def start_requests
-      Request.build(settings[:url_handlers])
+      Request.build(settings[:start_urls])
     end
 
     def idle?

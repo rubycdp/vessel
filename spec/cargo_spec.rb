@@ -4,32 +4,74 @@ require "spec_helper"
 
 module Vessel
   describe Cargo do
-    it "shows default name" do
-      CrawlerWithoutDomain = Class.new(Vessel::Cargo)
-      crawler = CrawlerWithoutDomain.new
-      expect(crawler.domain).to eq("crawlerwithoutdomain")
-    end
+    describe ".domain" do
+      it "shows default" do
+        CrawlerWithoutDomain = Class.new(Vessel::Cargo)
+        crawler = CrawlerWithoutDomain.new
 
-    it "shows set name" do
-      CrawlerWithDomain = Class.new(Vessel::Cargo) { domain "blablabla" }
-      crawler = CrawlerWithDomain.new
-      expect(crawler.domain).to eq("blablabla")
-    end
-
-    it "overrides name" do
-      allow(Engine).to receive(:run)
-      CrawlerOne = Class.new(Vessel::Cargo) do
-        domain "blabla.com"
-        start_urls "http://www.blabla.com"
+        expect(crawler.domain).to eq("crawlerwithoutdomain")
       end
 
-      CrawlerOne.run(domain: "alabama.com",
-                     start_urls: ["http://www1.alabama.com",
-                                  "http://www2.alabama.com"])
+      it "shows set" do
+        CrawlerWithDomain = Class.new(Vessel::Cargo) { domain "blablabla" }
+        crawler = CrawlerWithDomain.new
 
-      expect(CrawlerOne.settings[:domain]).to eq("alabama.com")
-      expect(CrawlerOne.settings[:start_urls])
-        .to eq(["http://www1.alabama.com", "http://www2.alabama.com"])
+        expect(crawler.domain).to eq("blablabla")
+      end
+    end
+
+    describe ".start_urls" do
+      it "accepts string" do
+        crawler = Class.new(Vessel::Cargo) { start_urls "blablabla" }
+
+        expect(crawler.settings[:start_urls]).to eq("blablabla" => :parse)
+      end
+
+      it "accepts multiple strings" do
+        crawler = Class.new(Vessel::Cargo) { start_urls "1", "2" }
+
+        expect(crawler.settings[:start_urls]).to eq("1" => :parse, "2" => :parse)
+      end
+
+      it "accepts array" do
+        crawler = Class.new(Vessel::Cargo) { start_urls ["1", "2"] }
+
+        expect(crawler.settings[:start_urls]).to eq("1" => :parse, "2" => :parse)
+      end
+
+      it "accepts hash" do
+        crawler = Class.new(Vessel::Cargo) { start_urls "1" => :parse_one, "2" => :parse_two }
+
+        expect(crawler.settings[:start_urls]).to eq("1" => :parse_one, "2" => :parse_two)
+      end
+    end
+
+    describe ".run" do
+      it "merges with default settings" do
+        allow(Engine).to receive(:run)
+        crawler = Class.new(Vessel::Cargo) do
+          domain "blabla.com"
+          start_urls "http://www.blabla.com"
+          threads max: 5
+        end
+
+        crawler.run(domain: "alabama.com",
+                    start_urls: ["http://www1.alabama.com",
+                                 "http://www2.alabama.com"])
+
+        expect(crawler.settings[:delay]).to eq(0)
+        expect(crawler.settings[:start_urls]).to eq([
+          "http://www1.alabama.com",
+          "http://www2.alabama.com"
+        ])
+        expect(crawler.settings[:middleware]).to eq([])
+        expect(crawler.settings[:min_threads]).to eq(1)
+        expect(crawler.settings[:max_threads]).to eq(5)
+        expect(crawler.settings[:ferrum]).to eq({})
+        expect(crawler.settings[:intercept]).to eq(nil)
+        expect(crawler.settings[:headers]).to eq(nil)
+        expect(crawler.settings[:domain]).to eq("alabama.com")
+      end
     end
   end
 end
