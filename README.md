@@ -76,7 +76,6 @@ and speedy.
 
 * domain
 * start_urls
-* start_with
 * [headers](https://github.com/rubycdp/vessel#headers)
 * delay
 * timeout

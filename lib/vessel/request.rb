@@ -8,8 +8,8 @@ module Vessel
 
     attr_reader :url, :uri, :handler, :data
 
-    def self.build(handlers)
-      handlers.empty? ? [new] : handlers.map { |url, handler| new(url: url, handler: handler) }
+    def self.build(url_handlers)
+      url_handlers.empty? ? [new] : url_handlers.map { |u, h| new(url: u, handler: h) }
     end
 
     def initialize(url: nil, handler: DEFAULT_HANDLER, data: nil)
