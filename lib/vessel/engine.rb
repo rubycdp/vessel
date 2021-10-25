@@ -45,13 +45,14 @@ module Vessel
         end
       end
     ensure
-      page.close if page
+      page&.close
     end
 
     private
 
     def start_requests
-      Request.build(settings[:start_urls])
+      return Request.new(url: nil) if settings[:start_urls].empty?
+      settings[:start_urls].map { |u, h| Request.new(url: u, handler: h) }
     end
 
     def idle?

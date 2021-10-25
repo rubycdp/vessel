@@ -4,17 +4,11 @@ require "vessel"
 class QuotesToScrapeCom < Vessel::Cargo
   domain "quotes.toscrape.com"
   start_urls "http://quotes.toscrape.com/tag/humor/"
-  ferrum browser_options: { "ignore-certificate-errors" => nil }
+  driver :ferrum, headless: true # or driver :mechanize
   headers "User-Agent" => "Browser"
-  intercept do |request|
-    if request.match?(/bla-bla/)
-      request.abort
-    elsif request.match?(/lorem/)
-      request.respond(body: "Lorem ipsum")
-    else
-      request.continue
-    end
-  end
+  # network blacklist: /bla-bla/
+  # network whitelist: /quotes.toscrape.com/
+  # network stub: { /lorem/ => "Ipsum", /ipsum/ => "Lorem" }
 
   def parse
     css("div.quote").each do |quote|
@@ -25,7 +19,7 @@ class QuotesToScrapeCom < Vessel::Cargo
     end
 
     if next_page = at_xpath("//li[@class='next']/a[@href]")
-      url = absolute_url(next_page.attribute(:href))
+      url = absolute_url(next_page[:href])
       yield request(url: url, handler: :parse)
     end
   end

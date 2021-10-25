@@ -22,13 +22,13 @@ Gem::Specification.new do |s|
     "source_code_uri" => "https://github.com/rubycdp/vessel",
   }
 
-  s.required_ruby_version = ">= 2.3.0"
+  s.required_ruby_version = ">= 2.5.0"
 
-  s.add_runtime_dependency "ferrum", ">= 0.8"
+  s.add_runtime_dependency "ferrum", "~> 0.11"
   s.add_runtime_dependency "mechanize", ">= 2.8.2"
-  s.add_runtime_dependency "thor", "~> 1.0"
+  s.add_runtime_dependency "thor", "~> 1.1"
 
-  s.add_development_dependency "bundler", "~> 2.0"
-  s.add_development_dependency "rake", "~> 12.3"
-  s.add_development_dependency "rspec", "~> 3.8"
+  s.add_development_dependency "bundler", "~> 2.2"
+  s.add_development_dependency "rake", "~> 13.0"
+  s.add_development_dependency "rspec", "~> 3.10"
 end

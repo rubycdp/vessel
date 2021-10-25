@@ -78,10 +78,9 @@ and speedy.
 * start_urls
 * [headers](https://github.com/rubycdp/vessel#headers)
 * delay
-* timeout
 * threads
 * middleware
-* ferrum
+* driver
 
 ### Headers
 

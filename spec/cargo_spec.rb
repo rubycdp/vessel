@@ -67,8 +67,6 @@ module Vessel
         expect(crawler.settings[:middleware]).to eq([])
         expect(crawler.settings[:min_threads]).to eq(1)
         expect(crawler.settings[:max_threads]).to eq(5)
-        expect(crawler.settings[:ferrum]).to eq({})
-        expect(crawler.settings[:intercept]).to eq(nil)
         expect(crawler.settings[:headers]).to eq(nil)
         expect(crawler.settings[:domain]).to eq("alabama.com")
       end

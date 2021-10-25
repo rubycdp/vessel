@@ -8,22 +8,20 @@ module Vessel
     extend Forwardable
     delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
-    attr_reader :browser, :queue, :delay, :headers
+    attr_reader :driver, :queue, :delay, :headers, :settings
 
     def initialize(queue, settings)
       @queue = queue
-      @min_threads, @max_threads, @delay, @headers, @intercept =
-        settings.values_at(:min_threads, :max_threads, :delay, :headers, :intercept)
-
-      options = settings[:ferrum]
-      options.merge!(timeout: settings[:timeout]) if settings[:timeout]
-      @browser = Ferrum::Browser.new(**options)
+      @settings = settings
+      @min_threads, @max_threads, @delay, @headers =
+        settings.values_at(:min_threads, :max_threads, :delay, :headers)
+      @driver = Driver.build(settings)
     end
 
     def post(*requests)
       requests.map do |request|
         Concurrent::Promises.future_on(pool, queue, request) do |queue, request|
-          queue << goto(request)
+          queue << go(request)
         end
       end
     end
@@ -31,7 +29,7 @@ module Vessel
     def stop
       pool.shutdown
       pool.kill unless pool.wait_for_termination(30)
-      browser.quit
+      driver.stop
     end
 
     private
@@ -44,21 +42,22 @@ module Vessel
       )
     end
 
-    def goto(request)
+    def go(request)
       return [nil, request] if request.stub?
 
-      page = browser.create_page
-      page.headers.set(headers) if headers
-      if @intercept
-        page.network.intercept
-        page.on(:request, &@intercept)
-      end
+      page = driver.create_page
+      # page.proxy = settings[:proxy].call if settings[:proxy]
+      page.blacklist = blacklist if settings[:blacklist]
+      page.whitelist = whitelist if settings[:whitelist]
+      page.headers = request.headers if request.headers
+      page.cookies = request.cookies if request.cookies
 
       # Delay is set between requests when we don't want to bombard server with
-      # requests so it requires crawler to be single threaded. Otherwise doesn't
+      # requests so it requires crawler to be single threaded. Otherwise it doesn't
       # make sense.
       sleep(delay) if @max_threads == 1 && delay > 0
-      page.goto(request.url)
+
+      page.go(request.url)
       [page, request]
     rescue => e
       [page, request, e]

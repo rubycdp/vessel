@@ -6,19 +6,17 @@ module Vessel
   class Request
     DEFAULT_HANDLER = :parse
 
-    attr_reader :url, :uri, :handler, :data
+    attr_reader :url, :uri, :handler, :data, :delay, :cookies, :headers
 
-    def self.build(url_handlers)
-      url_handlers.empty? ? [new] : url_handlers.map { |u, h| new(url: u, handler: h) }
-    end
 
-    def initialize(url: nil, handler: DEFAULT_HANDLER, data: nil)
+    def initialize(url: nil, handler: nil, delay: nil, cookies: nil, headers: nil, data: nil)
       if url
         @url = url.to_s
         @uri = Addressable::URI.parse(@url)
       end
 
-      @handler = handler
+      @delay, @cookies, @headers = delay, cookies, headers
+      @handler = handler || DEFAULT_HANDLER
       @data = data.freeze if data
     end
 

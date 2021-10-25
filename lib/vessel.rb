@@ -7,6 +7,7 @@ require "vessel/scheduler"
 require "vessel/request"
 require "vessel/version"
 require "vessel/cargo"
+require "vessel/driver"
 
 module Vessel
   class Error < StandardError; end
