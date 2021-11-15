@@ -4,9 +4,6 @@ require "bundler/setup"
 require "rspec"
 
 PROJECT_ROOT = File.expand_path("..", __dir__)
-%w[/lib /spec].each { |p| $:.unshift(p) }
+%w[/lib /spec].each { |p| $LOAD_PATH.unshift(p) }
 
 require "vessel"
-
-RSpec.configure do |config|
-end

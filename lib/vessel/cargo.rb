@@ -16,7 +16,8 @@ module Vessel
       Engine.run(self, &block)
     end
 
-    extend Forwardable, Settings
+    extend Settings
+    extend Forwardable
     delegate %i[at_css css at_xpath xpath] => :page
 
     attr_reader :page
@@ -47,4 +48,6 @@ module Vessel
       Addressable::URI.parse(page.current_url)
     end
   end
+
+  Crawler = Cargo
 end

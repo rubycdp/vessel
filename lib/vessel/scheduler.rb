@@ -20,9 +20,7 @@ module Vessel
 
     def post(*requests)
       requests.map do |request|
-        Concurrent::Promises.future_on(pool, queue, request) do |queue, request|
-          queue << go(request)
-        end
+        Concurrent::Promises.future_on(pool, queue, request) { |q, r| q << go_to(r) }
       end
     end
 
@@ -42,7 +40,7 @@ module Vessel
       )
     end
 
-    def go(request)
+    def go_to(request)
       return [nil, request] if request.stub?
 
       page = driver.create_page
@@ -55,11 +53,11 @@ module Vessel
       # Delay is set between requests when we don't want to bombard server with
       # requests so it requires crawler to be single threaded. Otherwise it doesn't
       # make sense.
-      sleep(delay) if @max_threads == 1 && delay > 0
+      sleep(delay) if @max_threads == 1 && delay.positive?
 
-      page.go(request.url)
+      page.go_to(request.url)
       [page, request]
-    rescue => e
+    rescue StandardError => e
       [page, request, e]
     end
   end

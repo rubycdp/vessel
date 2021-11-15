@@ -25,7 +25,6 @@ module Vessel
         handle(page, request, error)
         @queue.close if idle?
       end
-
     ensure
       scheduler.stop
     end
@@ -52,13 +51,14 @@ module Vessel
 
     def start_requests
       return Request.new(url: nil) if settings[:start_urls].empty?
+
       settings[:start_urls].map { |u, h| Request.new(url: u, handler: h) }
     end
 
     def idle?
       @queue.empty? &&
-      @scheduler.queue_length.zero? &&
-      @scheduler.scheduled_task_count == @scheduler.completed_task_count
+        @scheduler.queue_length.zero? &&
+        @scheduler.scheduled_task_count == @scheduler.completed_task_count
     end
   end
 end

@@ -11,5 +11,6 @@ require "vessel/driver"
 
 module Vessel
   class Error < StandardError; end
+
   class NotImplementedError < Error; end
 end

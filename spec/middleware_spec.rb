@@ -7,13 +7,15 @@ module Vessel
     it "builds nothing" do
       expect(Middleware.build).to be_nil
       expect(Middleware.build(*nil)).to be_nil
-      expect(Middleware.build(*[])).to be_nil
+
+      args = []
+      expect(Middleware.build(*args)).to be_nil
     end
 
     it "builds chain" do
-      A = Class.new(Middleware)
-      B = Class.new(Middleware)
-      expect(Middleware.build(A, B)).to eq(A.new(B.new))
+      a = Class.new(Middleware)
+      b = Class.new(Middleware)
+      expect(Middleware.build(a, b)).to eq(a.new(b.new))
     end
   end
 end

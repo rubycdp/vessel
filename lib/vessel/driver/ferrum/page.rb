@@ -7,7 +7,7 @@ module Vessel
     module Ferrum
       class Page < Page
         extend Forwardable
-        delegate %i[css at_css xpath at_xpath body current_url go close] => :page
+        delegate %i[css at_css xpath at_xpath body current_url go_to close] => :page
 
         def create
           @page = browser.create_page
@@ -44,9 +44,9 @@ module Vessel
         end
 
         def size
-          page.network.traffic.map { |req|
+          page.network.traffic.map do |req|
             [req.response&.body_size, req.response&.headers_size]
-          }.flatten.compact.inject(&:+)
+          end.flatten.compact.inject(&:+)
         end
       end
     end

@@ -5,6 +5,7 @@ require "spec_helper"
 module Vessel
   describe Cargo do
     describe ".domain" do
+      # rubocop:disable Lint/ConstantDefinitionInBlock
       it "shows default" do
         CrawlerWithoutDomain = Class.new(Vessel::Cargo)
         crawler = CrawlerWithoutDomain.new
@@ -18,6 +19,7 @@ module Vessel
 
         expect(crawler.domain).to eq("blablabla")
       end
+      # rubocop:enable Lint/ConstantDefinitionInBlock
     end
 
     describe ".start_urls" do
@@ -34,7 +36,7 @@ module Vessel
       end
 
       it "accepts array" do
-        crawler = Class.new(Vessel::Cargo) { start_urls ["1", "2"] }
+        crawler = Class.new(Vessel::Cargo) { start_urls %w[1 2] }
 
         expect(crawler.settings[:start_urls]).to eq("1" => :parse, "2" => :parse)
       end

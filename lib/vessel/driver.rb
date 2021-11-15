@@ -4,6 +4,7 @@ require "vessel/driver/page"
 
 module Vessel
   class Driver
+    # rubocop:disable Style/ClassVars
     def self.driver_name(name)
       @@drivers ||= {}
       @@drivers[name.to_sym] = self
@@ -13,6 +14,7 @@ module Vessel
       name = settings[:driver_name].to_sym
       @@drivers.fetch(name.to_sym).new(settings)
     end
+    # rubocop:enable Style/ClassVars
 
     require "vessel/driver/ferrum"
     require "vessel/driver/mechanize"

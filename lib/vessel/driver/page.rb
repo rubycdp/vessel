@@ -18,7 +18,7 @@ module Vessel
         raise NotImplementedError
       end
 
-      def go(url)
+      def go_to(url)
         raise NotImplementedError
       end
 

@@ -19,7 +19,7 @@ module Vessel
           @browser = nil
         end
 
-        def go(url)
+        def go_to(url)
           browser.get(url)
         end
 
@@ -35,8 +35,7 @@ module Vessel
           # browser.set_proxy(host, port, user, password)
         end
 
-        def blacklist=(*)
-        end
+        def blacklist=(*); end
 
         def headers=(headers)
           browser.request_headers = headers

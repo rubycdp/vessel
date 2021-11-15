@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 module Vessel
   class Cargo
     module Settings
-      attr_reader :settings
-
       def domain(name)
         settings[:domain] = name
       end
@@ -50,7 +50,7 @@ module Vessel
           driver_options: {},
           headers: nil,
           # proxy: nil,
-          domain: name&.split('::')&.last&.downcase
+          domain: name&.split("::")&.last&.downcase
         }
       end
     end

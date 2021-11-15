@@ -12,8 +12,8 @@ module Vessel
       expect(scheduler.queue).to be(queue)
     end
 
-		it "has a driver" do
-      expect( scheduler.driver ).to be_a(Vessel::Driver)
+    it "has a driver" do
+      expect(scheduler.driver).to be_a(Vessel::Driver)
     end
 
     it "has thread pool statistics" do
@@ -78,6 +78,5 @@ module Vessel
         expect(scheduler.driver).to have_receive(:stop)
       end
     end
-
   end
 end

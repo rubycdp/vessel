@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 require "vessel"
 
@@ -18,13 +20,14 @@ class QuotesToScrapeCom < Vessel::Cargo
       })
     end
 
-    if next_page = at_xpath("//li[@class='next']/a[@href]")
-      url = absolute_url(next_page[:href])
-      yield request(url: url, handler: :parse)
-    end
+    next_page = at_xpath("//li[@class='next']/a[@href]")
+    return unless next_page
+
+    url = absolute_url(next_page[:href])
+    yield request(url: url, handler: :parse)
   end
 
-  def on_error(request, error)
+  def on_error(_request, error)
     raise error
   end
 end

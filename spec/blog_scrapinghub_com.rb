@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BlogScrapinghubCom < Vessel::Cargo
   domain "blog.scrapinghub.com"
   start_urls "https://blog.scrapinghub.com"

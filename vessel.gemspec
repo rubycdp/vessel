@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 lib = File.expand_path("lib", __dir__)
-$:.unshift(lib) unless $:.include?(lib)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require "vessel/version"
 
@@ -11,7 +13,8 @@ Gem::Specification.new do |s|
   s.email         = ["d.vorotilin@gmail.com"]
   s.homepage      = "https://github.com/route/vessel"
   s.summary       = "High-level web crawling framework"
-  s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and extract structured data from their pages"
+  s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and "\
+                    "extract structured data from their pages"
   s.license       = "MIT"
   s.require_paths = ["lib"]
   s.files         = Dir["{lib}/**/*"] + %w[LICENSE README.md]
@@ -19,10 +22,10 @@ Gem::Specification.new do |s|
     "homepage_uri" => "https://vessel.rubycdp.com/",
     "bug_tracker_uri" => "https://github.com/rubycdp/vessel/issues",
     "documentation_uri" => "https://github.com/rubycdp/vessel/blob/master/README.md",
-    "source_code_uri" => "https://github.com/rubycdp/vessel",
+    "source_code_uri" => "https://github.com/rubycdp/vessel"
   }
 
-  s.required_ruby_version = ">= 2.5.0"
+  s.required_ruby_version = ">= 2.6.0"
 
   s.add_runtime_dependency "ferrum", "~> 0.11"
   s.add_runtime_dependency "mechanize", ">= 2.8.2"
