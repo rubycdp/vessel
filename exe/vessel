@@ -2,4 +2,6 @@
 # frozen_string_literal: true
 
 require "vessel"
+require "vessel/cli"
+
 Vessel::CLI.start(ARGV)
