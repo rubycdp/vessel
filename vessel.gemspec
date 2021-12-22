@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.bindir        = "exe"
   s.executables   = ["vessel"]
-  s.files         = Dir["{exe/*,lib/**/*,LICENSE,README.md,*.gemspec}"]
+  s.files         = Dir["{exe/*,lib/**/*,LICENSE,README.md}"]
   s.metadata = {
     "homepage_uri" => "https://vessel.rubycdp.com/",
     "bug_tracker_uri" => "https://github.com/rubycdp/vessel/issues",
