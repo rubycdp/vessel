@@ -16,7 +16,7 @@ module Vessel
       Engine.run(self, &block)
     end
 
-    extend Settings
+    include Settings
     extend Forwardable
     delegate %i[at_css css at_xpath xpath] => :page
 
