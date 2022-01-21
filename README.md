@@ -96,7 +96,7 @@ end
 You can disable headless mode by passing `ferrum` settings:
 
 ```ruby
-MyScraper.run(ferrum: { headless: false })
+MyScraper.run(driver_options: { headless: false })
 ```
 
 ## Selectors
