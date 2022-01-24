@@ -23,7 +23,7 @@ module Vessel
 
     def initialize(settings = nil)
       @settings = settings
-      start(settings[:driver_options])
+      start(**settings[:driver_options])
       at_exit { stop }
     end
 
