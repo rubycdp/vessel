@@ -93,7 +93,7 @@ end
 
 ### Headful mode
 
-You can disable headless mode by passing `ferrum` settings:
+You can disable headless mode by passing `driver_options` settings:
 
 ```ruby
 MyScraper.run(driver_options: { headless: false })
