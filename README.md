@@ -8,8 +8,6 @@ from websites. It can be used in a wide range of scenarios, like data mining,
 monitoring or historical archival. For automated testing we recommend
 [Cuprite](https://github.com/rubycdp/cuprite).
 
-Web design by [Evrone](https://evrone.com/).
-
 
 ## Install
 
