@@ -8,20 +8,19 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.authors       = ["Dmitry Vorotilin"]
   s.email         = ["d.vorotilin@gmail.com"]
-  s.homepage      = "https://github.com/rubycdp/vessel"
+  s.homepage      = "https://github.com/route/vessel"
   s.summary       = "High-level web crawling framework"
   s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and "\
                     "extract structured data from their pages"
   s.license       = "MIT"
-  s.require_paths = ["lib"]
-  s.bindir        = "exe"
+  s.files         = Dir["bin/*", "lib/**/*", "LICENSE", "README.md"]
+  s.bindir        = "bin"
   s.executables   = ["vessel"]
-  s.files         = Dir["{exe/*,lib/**/*,LICENSE,README.md}"]
+  s.require_paths = ["lib"]
   s.metadata = {
     "homepage_uri" => "https://vessel.rubycdp.com/",
     "bug_tracker_uri" => "https://github.com/rubycdp/vessel/issues",
     "documentation_uri" => "https://github.com/rubycdp/vessel/blob/master/README.md",
-    "changelog_uri" => "https://github.com/rubycdp/vessel/blob/master/CHANGELOG.md",
     "source_code_uri" => "https://github.com/rubycdp/vessel",
     "rubygems_mfa_required" => "true"
   }
