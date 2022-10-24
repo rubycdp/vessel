@@ -1,33 +1,27 @@
 # frozen_string_literal: true
 
 require "vessel/driver/page"
+require "vessel/driver/registry"
 
 module Vessel
   class Driver
-    # rubocop:disable Style/ClassVars
     def self.driver_name(name)
-      @@drivers ||= {}
-      @@drivers[name.to_sym] = self
+      Registry.instance.register(name, self)
     end
 
-    def self.build(settings = nil)
-      name = settings[:driver_name].to_sym
-      @@drivers.fetch(name.to_sym).new(settings)
-    end
-    # rubocop:enable Style/ClassVars
+    require "vessel/driver/ferrum/driver"
+    require "vessel/driver/mechanize/driver"
 
-    require "vessel/driver/ferrum"
-    require "vessel/driver/mechanize"
+    attr_reader :browser, :settings, :proxy
 
-    attr_reader :browser, :settings
-
-    def initialize(settings = nil)
+    def initialize(settings)
       @settings = settings
-      start(**settings[:driver_options])
+      @proxy = settings[:proxy].new if settings[:proxy] && settings[:proxy] <= Proxy
+      start
       at_exit { stop }
     end
 
-    def start(**options)
+    def start
       raise NotImplementedError
     end
 
@@ -35,7 +29,7 @@ module Vessel
       raise NotImplementedError
     end
 
-    def create_page
+    def create_page(proxy: nil)
       raise NotImplementedError
     end
 
@@ -43,6 +37,26 @@ module Vessel
       stop
       start
       true
+    end
+
+    def go_to(request)
+      return [nil, request] if request.stub?
+
+      page = create_page(proxy: proxy&.next)
+      page.blacklist = settings[:blacklist] if settings[:blacklist]
+      page.whitelist = settings[:whitelist] if settings[:whitelist]
+      page.headers = request.headers if request.headers
+      page.cookies = request.cookies if request.cookies
+
+      # Delay is set between requests when we don't want to bombard server with
+      # requests so it requires crawler to be single threaded. Otherwise it doesn't
+      # make sense.
+      sleep(delay) if settings[:max_threads] == 1 && delay.positive?
+
+      page.go_to(request.url)
+      [page, request]
+    rescue StandardError => e
+      [page, request, e]
     end
   end
 end

@@ -7,18 +7,18 @@ module Vessel
     module Ferrum
       class Page < Page
         extend Forwardable
-        delegate %i[css at_css xpath at_xpath body current_url go_to close] => :page
+        delegate %i[css at_css xpath at_xpath body current_url go_to] => :page
 
-        def create
-          @page = browser.create_page
+        attr_reader :page
+
+        def initialize(page)
+          super()
+          @page = page
         end
 
-        def proxy=(host:, port:, user: nil, password: nil)
-          # browser.proxy_server.rotate(host: host, port: port, user: user, password: password)
-        end
-
-        def blacklist=(patterns)
-          page.network.blacklist = patterns
+        def close
+          page.context.dispose if page.use_proxy?
+          page.close
         end
 
         def headers=(headers)
@@ -32,7 +32,7 @@ module Vessel
         end
 
         def cookies=(cookies)
-          cookies.each { |c| page.cookies.set(c.dup) }
+          cookies.each { |c| page.cookies.set(c) }
         end
 
         def cookies
@@ -47,6 +47,14 @@ module Vessel
           page.network.traffic.map do |req|
             [req.response&.body_size, req.response&.headers_size]
           end.flatten.compact.inject(&:+)
+        end
+
+        def blacklist=(patterns)
+          page.network.blacklist = patterns
+        end
+
+        def whitelist=(patterns)
+          page.network.whitelist = patterns
         end
       end
     end

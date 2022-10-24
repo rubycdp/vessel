@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
+require "vessel/proxy"
+
 module Vessel
   class Cargo
     module Settings
+      DELAY = 0
+      START_URLS = {}.freeze
+      MIDDLEWARE = [].freeze
+      MIN_THREADS = 1
+      MAX_THREADS = Concurrent.processor_count
+
       def domain(name)
         settings[:domain] = name
       end
@@ -26,6 +34,10 @@ module Vessel
         settings[:headers] = value
       end
 
+      def cookies(*value)
+        settings[:cookies] = value.flatten
+      end
+
       def threads(min: MIN_THREADS, max: MAX_THREADS)
         settings[:min_threads] = min
         settings[:max_threads] = max
@@ -35,9 +47,17 @@ module Vessel
         settings[:middleware] = classes
       end
 
-      # def proxy(callable)
-      #   settings[:proxy] = callable
-      # end
+      def proxy(klass)
+        settings[:proxy] = klass
+      end
+
+      def blacklist(patterns)
+        settings[:blacklist] = patterns
+      end
+
+      def whitelist(patterns)
+        settings[:whitelist] = patterns
+      end
 
       def settings
         @settings ||= {
@@ -49,7 +69,10 @@ module Vessel
           driver_name: :ferrum,
           driver_options: {},
           headers: nil,
-          # proxy: nil,
+          cookies: nil,
+          proxy: nil,
+          blacklist: nil,
+          whitelist: nil,
           domain: name&.split("::")&.last&.downcase
         }
       end

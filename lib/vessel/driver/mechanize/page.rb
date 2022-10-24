@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "forwardable"
-require "mechanize"
 
 module Vessel
   class Driver
@@ -10,55 +9,70 @@ module Vessel
         extend Forwardable
         delegate %i[css at_css xpath at_xpath body] => :page
 
-        def create
-          @browser = ::Mechanize.new
+        attr_reader :mechanize
+
+        def initialize(mechanize)
+          super()
+          @mechanize = mechanize
         end
 
         def close
-          browser.shutdown
-          @browser = nil
+          mechanize.shutdown
+          @mechanize = nil
         end
 
         def go_to(url)
-          browser.get(url)
+          mechanize.get(url)
         end
 
-        def page
-          browser.current_page
+        def headers=(headers)
+          mechanize.request_headers = headers
+        end
+
+        def headers
+          mechanize.request_headers
+        end
+
+        def cookies=(cookies)
+          cookies.each { |c| mechanize.cookie_jar << ::Mechanize::Cookie.new(c) }
+        end
+
+        def cookies
+          mechanize.cookies
+        end
+
+        def status
+          page.code.to_i
+        end
+
+        def size
+          page.content.bytesize
         end
 
         def current_url
           page&.uri.to_s
         end
 
-        def proxy=(host:, port:, user: nil, password: nil)
-          # browser.set_proxy(host, port, user, password)
+        # rubocop:disable all
+        def blacklist=(*)
+          @@_blacklist_warning ||= begin
+            warn "blacklist is not supported by mechanize driver"
+            true
+          end
         end
 
-        def blacklist=(*); end
-
-        def headers=(headers)
-          browser.request_headers = headers
+        def whitelist=(*)
+          @@_whitelist_warning ||= begin
+            warn "whitelist is not supported by mechanize driver"
+            true
+          end
         end
+        # rubocop:enable all
 
-        def headers
-          browser.request_headers
-        end
+        private
 
-        def cookies=(cookies)
-          cookies.each { |c| browser.cookie_jar << Mechanize::Cookie.new(c) }
-        end
-
-        def cookies
-          browser.cookies
-        end
-
-        def status
-          page.code
-        end
-
-        def size
-          page.content.bytesize
+        def page
+          mechanize.current_page
         end
       end
     end
