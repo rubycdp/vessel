@@ -29,7 +29,7 @@ require "vessel"
 
 class QuotesToScrapeCom < Vessel::Cargo
   domain "quotes.toscrape.com"
-  start_urls "http://quotes.toscrape.com/tag/humor/"
+  start_urls "https://quotes.toscrape.com/tag/humor/"
 
   def parse
     css("div.quote").each do |quote|
@@ -74,11 +74,15 @@ and speedy.
 
 * domain
 * start_urls
-* [headers](https://github.com/rubycdp/vessel#headers)
+* driver
 * delay
+* [headers](https://github.com/rubycdp/vessel#headers)
+* cookies
 * threads
 * middleware
-* driver
+* proxy
+* blacklist
+* whitelist
 
 ### Headers
 

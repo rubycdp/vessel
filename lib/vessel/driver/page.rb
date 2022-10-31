@@ -3,30 +3,15 @@
 module Vessel
   class Driver
     class Page
-      attr_reader :browser, :page
-
-      def initialize(browser)
-        @browser = browser
-        create
-      end
-
-      def create
-        raise NotImplementedError
-      end
-
       def close
         raise NotImplementedError
       end
 
-      def go_to(url)
+      def go_to(_)
         raise NotImplementedError
       end
 
-      def blacklist=(patterns)
-        raise NotImplementedError
-      end
-
-      def headers=(headers)
+      def headers=(_)
         raise NotImplementedError
       end
 
@@ -34,15 +19,11 @@ module Vessel
         raise NotImplementedError
       end
 
-      def cookies=(cookies)
+      def cookies=(_)
         raise NotImplementedError
       end
 
       def cookies
-        raise NotImplementedError
-      end
-
-      def proxy=(ip:, port:, type: nil, user: nil, password: nil)
         raise NotImplementedError
       end
 
@@ -55,6 +36,18 @@ module Vessel
       end
 
       def size
+        raise NotImplementedError
+      end
+
+      def current_url
+        raise NotImplementedError
+      end
+
+      def blacklist=(_)
+        raise NotImplementedError
+      end
+
+      def whitelist=(_)
         raise NotImplementedError
       end
 

@@ -1,27 +1,29 @@
 # frozen_string_literal: true
 
+require "mechanize"
+require "vessel/driver/mechanize/page"
+
 module Vessel
   class Driver
     module Mechanize
       class Driver < ::Vessel::Driver
-        DEFAULT_OPTIONS = {}.freeze
-
         driver_name :mechanize
 
-        def start(**options)
-          @options = DEFAULT_OPTIONS.merge(options)
-          @browser = ::Mechanize.new do |b|
-            b.user_agent = settings.dig(:headers, "User-Agent")
-          end
+        def start
+          # Nothing to start here
         end
 
         def stop
-          browser&.shutdown
-          @browser = nil
+          # Nothing to stop here
         end
 
-        def create_page
-          Page.new(browser)
+        def create_page(proxy: nil)
+          mechanize = ::Mechanize.new do |m|
+            m.user_agent = settings.dig(:headers, "User-Agent")
+            m.set_proxy(proxy[:host], proxy[:port], proxy[:user], proxy[:password]) if proxy
+          end
+
+          Page.new(mechanize)
         end
       end
     end

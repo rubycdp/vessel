@@ -3,14 +3,29 @@
 require "json"
 require "vessel"
 
+class MyProxy < Vessel::ShuffledProxy
+  @proxy1 = Ferrum::Proxy.start
+  @proxy2 = Ferrum::Proxy.start
+
+  PROXIES = [
+    { host: @proxy1.host, port: @proxy1.port },
+    { host: @proxy2.host, port: @proxy2.port }
+  ].freeze
+end
+
 class QuotesToScrapeCom < Vessel::Cargo
   domain "quotes.toscrape.com"
-  start_urls "http://quotes.toscrape.com/tag/humor/"
-  driver :ferrum, headless: true # or driver :mechanize
-  headers "User-Agent" => "Browser"
-  # network blacklist: /bla-bla/
-  # network whitelist: /quotes.toscrape.com/
-  # network stub: { /lorem/ => "Ipsum", /ipsum/ => "Lorem" }
+  start_urls "https://quotes.toscrape.com/tag/humor/"
+  driver :ferrum
+  headers "User-Agent" => "Browser", "Test" => "test"
+  cookies [
+    { name: "lang", value: "en", domain: "www.google.com", path: "/" },
+    { name: "lang", value: "en", domain: "www.google.com", path: "/path" }
+  ]
+  # blacklist /bla-bla/
+  # whitelist /quotes.toscrape.com/
+  # stub { /lorem/ => "Ipsum", /ipsum/ => "Lorem" }
+  proxy MyProxy
 
   def parse
     css("div.quote").each do |quote|
@@ -23,8 +38,7 @@ class QuotesToScrapeCom < Vessel::Cargo
     next_page = at_xpath("//li[@class='next']/a[@href]")
     return unless next_page
 
-    url = absolute_url(next_page[:href])
-    yield request(url: url, handler: :parse)
+    yield request(url: absolute_url(next_page[:href]), handler: :parse)
   end
 
   def on_error(_request, error)

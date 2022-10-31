@@ -50,9 +50,9 @@ module Vessel
     private
 
     def start_requests
-      return Request.new(url: nil) if settings[:start_urls].empty?
+      return @crawler_class.build_request(url: nil) if settings[:start_urls].empty?
 
-      settings[:start_urls].map { |u, h| Request.new(url: u, handler: h) }
+      settings[:start_urls].map { |u, h| @crawler_class.build_request(url: u, handler: h) }
     end
 
     def idle?

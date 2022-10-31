@@ -5,15 +5,17 @@ require "vessel/cargo/settings"
 
 module Vessel
   class Cargo
-    DELAY = 0
-    START_URLS = {}.freeze
-    MIDDLEWARE = [].freeze
-    MIN_THREADS = 1
-    MAX_THREADS = Concurrent.processor_count
-
     def self.run(settings = nil, &block)
       self.settings.merge!(Hash(settings))
       Engine.run(self, &block)
+    end
+
+    def self.build_request(url:, **options)
+      Request.new(url: url,
+                  delay: settings[:delay],
+                  cookies: settings[:cookies],
+                  headers: settings[:headers],
+                  **options)
     end
 
     extend Settings
@@ -37,7 +39,7 @@ module Vessel
     private
 
     def request(**options)
-      Request.new(**options)
+      self.class.build_request(**options)
     end
 
     def absolute_url(relative)

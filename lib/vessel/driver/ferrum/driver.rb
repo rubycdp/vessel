@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "ferrum"
+require "vessel/driver/ferrum/page"
 
 module Vessel
   class Driver
@@ -11,15 +12,14 @@ module Vessel
           js_errors: false,
           process_timeout: 30,
           pending_connection_errors: false,
-          # proxy: { server: true },
           browser_options: { "ignore-certificate-errors" => nil }
         }.freeze
 
         driver_name :ferrum
 
-        def start(**options)
-          options = DEFAULT_OPTIONS.merge(options)
-          @browser = ::Ferrum::Browser.new(**options)
+        def start
+          driver_options = settings.fetch(:driver_options, {})
+          @browser = ::Ferrum::Browser.new(**DEFAULT_OPTIONS.merge(driver_options))
         end
 
         def stop
@@ -27,8 +27,11 @@ module Vessel
           @browser = nil
         end
 
-        def create_page
-          Page.new(browser)
+        def create_page(proxy: nil)
+          options = {}
+          options.merge!(proxy: proxy) if proxy
+          page = browser.create_page(**options)
+          Page.new(page)
         end
       end
     end
