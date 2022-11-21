@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.metadata = {
     "homepage_uri" => "https://vessel.rubycdp.com/",
     "bug_tracker_uri" => "https://github.com/rubycdp/vessel/issues",
-    "documentation_uri" => "https://github.com/rubycdp/vessel/blob/master/README.md",
+    "documentation_uri" => "https://github.com/rubycdp/vessel/blob/main/README.md",
     "source_code_uri" => "https://github.com/rubycdp/vessel",
     "rubygems_mfa_required" => "true"
   }
