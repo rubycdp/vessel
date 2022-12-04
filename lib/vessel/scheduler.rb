@@ -8,18 +8,18 @@ module Vessel
     extend Forwardable
     delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
-    attr_reader :driver, :queue, :delay, :headers, :settings
+    attr_reader :driver, :queue, :settings
 
     def initialize(queue, settings)
       @queue = queue
       @settings = settings
-      @delay, @headers = settings.values_at(:delay, :headers)
       @driver = Driver::Registry.instance.build(settings)
     end
 
     def post(*requests)
-      requests.map do |request|
-        Concurrent::Promises.future_on(pool, queue, request) { |q, r| q << driver.go_to(r) }
+      requests.flatten.map do |request|
+        Concurrent::Future.execute(executor: pool,
+                                   args: [request]) { |r| queue << driver.go_to(r) }
       end
     end
 
@@ -27,6 +27,15 @@ module Vessel
       pool.shutdown
       pool.kill unless pool.wait_for_termination(30)
       driver.stop
+    end
+
+    def force_kill
+      pool.send(:ns_kill_execution)
+      driver.stop
+    end
+
+    def idle?
+      queue_length.zero? && scheduled_task_count == completed_task_count
     end
 
     private

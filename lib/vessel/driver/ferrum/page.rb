@@ -36,7 +36,7 @@ module Vessel
         end
 
         def cookies
-          page.cookies.all
+          page.cookies.all.values
         end
 
         def status

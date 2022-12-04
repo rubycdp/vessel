@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+
 # frozen_string_literal: true
 
+require "bundler/setup"
 require "vessel"
-require "vessel/cli"
 
 Vessel::CLI.start(ARGV)

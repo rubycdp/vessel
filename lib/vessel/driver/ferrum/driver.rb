@@ -15,6 +15,10 @@ module Vessel
           browser_options: { "ignore-certificate-errors" => nil }
         }.freeze
 
+        def self.direct_network_errors
+          @direct_network_errors ||= (super + [::Ferrum::TimeoutError, ::Ferrum::StatusError]).freeze
+        end
+
         driver_name :ferrum
 
         def start

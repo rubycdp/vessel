@@ -6,11 +6,16 @@ module Vessel
 
     def next
       @index ||= 0
-      return unless proxies
+      @prepared ||= prepare
+      return if proxies.nil? || proxies.empty?
 
       settings = proxies[@index % proxies.size]
       @index += 1
       settings
+    end
+
+    def prepare
+      raise NotImplementedError
     end
   end
 
@@ -18,15 +23,19 @@ module Vessel
     PROXIES = [].freeze
 
     def initialize
-      super
       @proxies = self.class::PROXIES
+      super
+    end
+
+    def prepare
+      true
     end
   end
 
   class ShuffledProxy < RoundRobinProxy
-    def initialize
-      super
-      @proxies = self.class::PROXIES.shuffle
+    def prepare
+      @proxies = @proxies.shuffle
+      true
     end
   end
 end

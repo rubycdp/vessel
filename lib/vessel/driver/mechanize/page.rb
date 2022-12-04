@@ -69,8 +69,6 @@ module Vessel
         end
         # rubocop:enable all
 
-        private
-
         def page
           mechanize.current_page
         end

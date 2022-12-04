@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "ferrum", "~> 0.12"
   s.add_runtime_dependency "mechanize", ">= 2.8.5"
+  s.add_runtime_dependency "nokogiri", "~> 1.13"
   s.add_runtime_dependency "thor", "~> 1.2"
 
   s.add_development_dependency "bundler", "~> 2.3"

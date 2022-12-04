@@ -1,23 +1,58 @@
 # frozen_string_literal: true
 
+require "concurrent"
+require "forwardable"
+
 module Vessel
   class Middleware
-    attr_reader :middleware
+    class InvalidItemError < RuntimeError; end
 
-    def self.build(*classes)
-      classes.inject { |base, klass| base.new(klass.new) }
+    class << self
+      extend Forwardable
+      delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
+
+      def build(settings, &block)
+        @settings = settings
+        @middlewares = if block_given?
+                         [block]
+                       else
+                         settings[:middleware].map { |m| Object.const_get(m).new(settings) }
+                       end
+        self
+      end
+
+      def call(fields)
+        Concurrent::Future.execute(executor: pool) do
+          @middlewares.inject(fields.to_h) { |hash, middleware| middleware.call(hash, fields) }
+        end
+      end
+
+      def pool
+        @pool ||= Concurrent::ThreadPoolExecutor.new(
+          min_threads: @settings[:min_threads],
+          max_threads: @settings[:max_threads],
+          max_queue: 0
+        )
+      end
+
+      def idle?(after: false)
+        completed_tasks = completed_task_count + (after ? 1 : 0)
+        queue_length.zero? && scheduled_task_count == completed_tasks
+      end
     end
 
-    def initialize(middleware = nil)
-      @middleware = middleware
-    end
+    attr_reader :settings
 
-    def ==(other)
-      self.class == other.class
+    def initialize(settings)
+      @settings = settings
     end
 
     def call
       raise NotImplementedError
+    end
+
+    def ==(other)
+      self.class == other.class
     end
   end
 end

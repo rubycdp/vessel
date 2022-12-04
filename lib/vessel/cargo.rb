@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require "forwardable"
+require "vessel/cargo/fieldable"
 require "vessel/cargo/settings"
+require "vessel/cargo/callbacks"
 
 module Vessel
   class Cargo
@@ -18,18 +20,32 @@ module Vessel
                   **options)
     end
 
-    extend Settings
-    extend Forwardable
-    delegate %i[at_css css at_xpath xpath] => :page
+    def self.start_requests
+      return build_request(url: nil) if settings[:start_urls].empty?
 
-    attr_reader :page
-
-    def initialize(page = nil)
-      @page = page
+      settings[:start_urls].map { |u, h| build_request(url: u, handler: h) }
     end
 
-    def domain
-      self.class.settings[:domain]
+    def self.store_cookies(cookies)
+      settings[:cookies] = cookies
+    end
+
+    include Callbacks
+    include Fieldable
+    extend Settings
+    extend Forwardable
+    delegate %i[at_css css at_xpath xpath absolute_url join_url
+                url url_encode url_decode uri_encode uri_decode
+                data attempt body raw] => :response
+
+    attr_reader :settings, :domain, :response, :page, :size
+
+    def initialize(response = nil)
+      @settings = self.class.settings
+      @domain = settings[:domain]
+      @response = response
+      @page = response&.page
+      @size = response&.size
     end
 
     def parse
@@ -38,16 +54,9 @@ module Vessel
 
     private
 
-    def request(**options)
-      self.class.build_request(**options)
-    end
-
-    def absolute_url(relative)
-      Addressable::URI.join(page.current_url, relative).to_s
-    end
-
-    def current_url
-      Addressable::URI.parse(page.current_url)
+    def request(url:, encode: true, **options)
+      url = absolute_url(url, encode: encode)
+      self.class.build_request(url: url, **options)
     end
   end
 

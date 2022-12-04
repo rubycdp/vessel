@@ -24,6 +24,7 @@ module Vessel
 
     describe "#post" do
       let(:request) { Vessel::Request.new } # empty request stub
+      let(:response) { Vessel::Response.new(**request.to_handler) }
 
       before { scheduler.post(request) }
 
@@ -33,7 +34,7 @@ module Vessel
         sleep 1 # wait for execution
 
         expect(scheduler.queue.length).to eq(1)
-        expect(scheduler.queue.pop).to eq([nil, request])
+        expect(scheduler.queue.pop).to eq([response, request])
       end
 
       it "updates thread pool statistics" do
