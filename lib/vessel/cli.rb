@@ -46,7 +46,7 @@ module Vessel
 
     desc "new NAME", "Generate new project."
     def new(name)
-      templates = File.expand_path("../skeleton", __FILE__)
+      templates = File.expand_path("skeleton", __dir__)
       FileUtils.cp_r(templates, "./#{name}")
       puts "Project #{name} generated"
     end
