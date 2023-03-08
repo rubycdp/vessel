@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require "vessel/proxy"
+require "vessel/util"
 
 module Vessel
   class Cargo
     module Settings
+      include Vessel::Util
+
       DELAY = 0
       START_URLS = {}.freeze
       MIDDLEWARE = [].freeze
@@ -83,9 +86,7 @@ module Vessel
 
       def settings
         @settings ||= if superclass.respond_to?(:settings)
-                        clone = superclass.settings.dup
-                        clone[:cookies] = clone[:cookies].dup
-                        clone
+                        deep_clone(superclass.settings)
                       else
                         {
                           delay: DELAY, start_urls: START_URLS, middleware: MIDDLEWARE,
