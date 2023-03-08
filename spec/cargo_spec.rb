@@ -48,6 +48,25 @@ module Vessel
       end
     end
 
+    describe ".settings" do
+      it "copies settings to the subclasses" do
+        parent = Class.new(Vessel::Cargo) do
+          headers "Test" => "test"
+          cookies [
+            { name: "lang", value: "en", domain: "www.google.com", path: "/" }
+          ]
+        end
+        child = Class.new(parent)
+
+        expect(child.settings[:headers]).to eq(parent.settings[:headers])
+        expect(child.settings[:headers]).not_to equal(parent.settings[:headers])
+
+        expect(child.settings[:cookies]).to eq(parent.settings[:cookies])
+        expect(child.settings[:cookies]).not_to equal(parent.settings[:cookies])
+        expect(child.settings[:cookies][0]).not_to equal(parent.settings[:cookies][0])
+      end
+    end
+
     describe ".run" do
       it "merges with default settings" do
         allow(Engine).to receive(:run)

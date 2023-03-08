@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require "addressable/uri"
+require "vessel/util"
 
 module Vessel
   class Request
+    include Vessel::Util
+
     DEFAULT_HANDLER = :parse
 
     attr_reader :url, :handler, :data, :delay, :cookies, :headers, :once
@@ -36,19 +39,6 @@ module Vessel
         cookies == other.cookies &&
         headers == other.headers &&
         once == other.once
-    end
-
-    private
-
-    def deep_clone(value)
-      case value
-      when Hash
-        value.inject({}) { |b, (k, v)| b.merge(k => deep_clone(v)) }
-      when Array
-        value.inject([]) { |b, v| b << deep_clone(v) }
-      else
-        value
-      end
     end
   end
 end
