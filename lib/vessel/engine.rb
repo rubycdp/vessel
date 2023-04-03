@@ -75,7 +75,11 @@ module Vessel
     private
 
     def engine_idle?
-      @queue.empty?
+      @queue.empty? &&
+        req_enqueued == res_dequeued &&
+        res_dequeued == res_handled &&
+        item_pipelined == item_processed &&
+        item_processed == (item_sent + item_rejected)
     end
 
     def engine_and_scheduler_idle?
@@ -83,7 +87,7 @@ module Vessel
     end
 
     def idle?
-      engine_and_scheduler_idle? && @middleware.idle?
+      engine_and_scheduler_idle? && middleware.idle?
     end
 
     def schedule(*requests)
@@ -93,7 +97,7 @@ module Vessel
 
     def process(fields)
       increase(:item_pipelined)
-      @middleware&.call(fields)&.add_observer(self, :on_item_processed)
+      middleware&.call(fields)&.add_observer(self, :on_item_processed)
     end
 
     def on_item_processed(_time, value, error)
@@ -106,7 +110,7 @@ module Vessel
         Logger.error("Engine: \n#{error.backtrace.join("\n")}")
       end
 
-      @queue.close if engine_and_scheduler_idle? && @middleware.idle?(after: true)
+      @queue.close if engine_and_scheduler_idle? && middleware.idle?(after: true)
     end
 
     def trap_sigint
@@ -115,6 +119,7 @@ module Vessel
         @queue.clear
         @queue.close
         scheduler.force_kill
+        middleware.force_kill
       end
     end
 

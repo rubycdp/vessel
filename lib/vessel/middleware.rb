@@ -39,6 +39,15 @@ module Vessel
         completed_tasks = completed_task_count + (after ? 1 : 0)
         queue_length.zero? && scheduled_task_count == completed_tasks
       end
+
+      def stop
+        pool.shutdown
+        pool.kill unless pool.wait_for_termination(30)
+      end
+
+      def force_kill
+        pool.send(:ns_kill_execution)
+      end
     end
 
     attr_reader :settings
