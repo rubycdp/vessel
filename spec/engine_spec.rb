@@ -15,15 +15,23 @@ describe Vessel::Engine do
   end
 
   describe "#run" do
-    let(:page)     { double(Ferrum::Page) }
-    let(:request)  { Vessel::Request.new }
+    let(:page)          { double(Ferrum::Page) }
+    let(:request)       { Vessel::Request.new }
+    let(:res_dequeued)  { double(Concurrent::AtomicFixnum, value: 0) }
+    let(:res_handled)  { double(Concurrent::AtomicFixnum, value: 0) }
 
     before do
       # stub out scheduler
       allow(engine.scheduler).to receive(:post)
       allow(engine.scheduler).to receive(:stop)
+      # stub out counters
+      allow(engine).to receive(:res_dequeued).and_return(res_dequeued)
+      allow(engine).to receive(:res_handled).and_return(res_handled)
       # stub out handle call (tested below)
-      allow(engine).to receive(:handle)
+      allow(engine).to receive(:handle) do
+        allow(res_dequeued).to receive(:value).and_return(1)
+        allow(res_handled).to receive(:value).and_return(1)
+      end
       # put something in the queue
       engine.scheduler.queue << [page, request]
     end
