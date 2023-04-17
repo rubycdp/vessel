@@ -11,7 +11,7 @@ module Vessel
     attr_accessor :rejected
     attr_reader :url, :data, :handler, :page, :attempt, :cookies
 
-    delegate %i[xpath css at_xpath at_css] => :body
+    delegate %i[xpath css at_xpath at_css] => Vessel.page_snapshot ? :body : :page
 
     def initialize(handler:, url: nil, data: nil, page: nil, attempt: 1)
       @url = Addressable::URI.parse(url) if url
