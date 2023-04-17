@@ -76,10 +76,10 @@ module Vessel
 
     def engine_idle?
       @queue.empty? &&
-        req_enqueued == res_dequeued &&
-        res_dequeued == res_handled &&
-        item_pipelined == item_processed &&
-        item_processed == (item_sent + item_rejected)
+        req_enqueued.value == res_dequeued.value &&
+        res_dequeued.value == res_handled.value &&
+        item_pipelined.value == item_processed.value &&
+        item_processed.value == (item_sent.value + item_rejected.value)
     end
 
     def engine_and_scheduler_idle?
