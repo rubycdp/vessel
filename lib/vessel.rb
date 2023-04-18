@@ -17,7 +17,7 @@ module Vessel
     end
 
     def page_snapshot
-      false
+      !!@page_snapshot
     end
 
     def loader
