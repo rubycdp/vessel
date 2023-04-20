@@ -10,7 +10,7 @@ describe Vessel::Engine do
   describe ".new" do
     it { expect(engine.crawler_class).to be(crawler_class) }
     it { expect(engine.settings).to be(crawler_class.settings) }
-    it { expect(engine.middleware).to eq(Vessel::Middleware) }
+    it { expect(engine.middleware_scheduler).to be_a(Vessel::MiddlewareScheduler) }
     it { expect(engine.scheduler).to be_a(Vessel::Scheduler) }
   end
 
@@ -90,7 +90,7 @@ describe Vessel::Engine do
     before do
       allow(crawler_class).to receive(:new).and_return(crawler)
       allow(crawler).to receive(:parse).and_yield(request).and_yield(result)
-      allow(engine.middleware).to receive(:call)
+      allow(engine.middleware_scheduler).to receive(:call)
       allow(engine.scheduler).to receive(:post)
       allow(response).to receive(:close)
     end
@@ -105,7 +105,7 @@ describe Vessel::Engine do
     it "calls block handler or middleware with #parse results" do
       engine.handle(response, request, error)
 
-      expect(engine.middleware).to have_received(:call).with(result)
+      expect(engine.middleware_scheduler).to have_received(:call).with(result)
     end
 
     it "schedules new requests emitted by #parse" do

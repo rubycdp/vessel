@@ -10,14 +10,14 @@ module Vessel
       new(*args, &block).tap(&:run)
     end
 
-    attr_reader :crawler_class, :settings, :scheduler, :middleware
+    attr_reader :crawler_class, :settings, :scheduler, :middleware_scheduler
 
     def initialize(klass, &block)
       @crawler_class = klass
       @settings = klass.settings
       @queue = SizedQueue.new(settings[:max_threads])
       @scheduler = Scheduler.new(@queue, settings)
-      @middleware = Middleware.build(settings, &block)
+      @middleware_scheduler = MiddlewareScheduler.new(settings, &block)
     end
 
     def run
@@ -87,7 +87,7 @@ module Vessel
     end
 
     def idle?
-      engine_and_scheduler_idle? && middleware.idle?
+      engine_and_scheduler_idle? && middleware_scheduler.idle?
     end
 
     def schedule(*requests)
@@ -97,7 +97,7 @@ module Vessel
 
     def process(fields)
       increase(:item_pipelined)
-      middleware&.call(fields)&.add_observer(self, :on_item_processed)
+      middleware_scheduler&.call(fields)&.add_observer(self, :on_item_processed)
     end
 
     def on_item_processed(_time, value, error)
@@ -110,7 +110,7 @@ module Vessel
         Logger.error("Engine: \n#{error.backtrace.join("\n")}")
       end
 
-      @queue.close if engine_and_scheduler_idle? && middleware.idle?(after: true)
+      @queue.close if engine_and_scheduler_idle? && middleware_scheduler.idle?(after: true)
     end
 
     def trap_sigint
@@ -119,7 +119,7 @@ module Vessel
         @queue.clear
         @queue.close
         scheduler.force_kill
-        middleware.force_kill
+        middleware_scheduler.force_kill
       end
     end
 
