@@ -24,6 +24,8 @@ describe Vessel::Engine do
       # stub out scheduler
       allow(engine.scheduler).to receive(:post)
       allow(engine.scheduler).to receive(:stop)
+      # stub out middleware scheduler
+      allow(engine.middleware_scheduler).to receive(:stop)
       # stub out counters
       allow(engine).to receive(:res_dequeued).and_return(res_dequeued)
       allow(engine).to receive(:res_handled).and_return(res_handled)
@@ -70,6 +72,12 @@ describe Vessel::Engine do
       expect(engine.scheduler).to have_received(:stop)
     end
 
+    it "stops the middleware scheduler when done" do
+      engine.run
+
+      expect(engine.middleware_scheduler).to have_received(:stop)
+    end
+
     it "ensures the scheduler is stopped" do
       error = StandardError.new
       allow(engine).to receive(:handle).and_raise(error)
@@ -77,6 +85,15 @@ describe Vessel::Engine do
 
       expect { engine.run }.to raise_error(error)
       expect(engine.scheduler).to have_received(:stop)
+    end
+
+    it "ensures the middleware scheduler is stopped" do
+      error = StandardError.new
+      allow(engine).to receive(:handle).and_raise(error)
+      engine.scheduler.queue << [page, request, error]
+
+      expect { engine.run }.to raise_error(error)
+      expect(engine.middleware_scheduler).to have_received(:stop)
     end
   end
 

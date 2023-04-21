@@ -34,6 +34,7 @@ module Vessel
       event_loop
     ensure
       scheduler.stop
+      middleware_scheduler.stop
       crawler_class.new.after(stats)
     end
 
@@ -44,6 +45,7 @@ module Vessel
       event_loop
     ensure
       scheduler.stop
+      middleware_scheduler.stop
     end
 
     def handle(response, request, error)
