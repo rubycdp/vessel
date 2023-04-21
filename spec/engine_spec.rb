@@ -18,7 +18,7 @@ describe Vessel::Engine do
     let(:page)          { double(Ferrum::Page) }
     let(:request)       { Vessel::Request.new }
     let(:res_dequeued)  { double(Concurrent::AtomicFixnum, value: 0) }
-    let(:res_handled)  { double(Concurrent::AtomicFixnum, value: 0) }
+    let(:res_handled)   { double(Concurrent::AtomicFixnum, value: 0) }
 
     before do
       # stub out scheduler
