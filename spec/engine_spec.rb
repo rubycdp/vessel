@@ -10,7 +10,7 @@ describe Vessel::Engine do
   describe ".new" do
     it { expect(engine.crawler_class).to be(crawler_class) }
     it { expect(engine.settings).to be(crawler_class.settings) }
-    it { expect(engine.middleware).to eq(Vessel::Middleware) }
+    it { expect(engine.middleware_scheduler).to be_a(Vessel::MiddlewareScheduler) }
     it { expect(engine.scheduler).to be_a(Vessel::Scheduler) }
   end
 
@@ -18,12 +18,14 @@ describe Vessel::Engine do
     let(:page)          { double(Ferrum::Page) }
     let(:request)       { Vessel::Request.new }
     let(:res_dequeued)  { double(Concurrent::AtomicFixnum, value: 0) }
-    let(:res_handled)  { double(Concurrent::AtomicFixnum, value: 0) }
+    let(:res_handled)   { double(Concurrent::AtomicFixnum, value: 0) }
 
     before do
       # stub out scheduler
       allow(engine.scheduler).to receive(:post)
       allow(engine.scheduler).to receive(:stop)
+      # stub out middleware scheduler
+      allow(engine.middleware_scheduler).to receive(:stop)
       # stub out counters
       allow(engine).to receive(:res_dequeued).and_return(res_dequeued)
       allow(engine).to receive(:res_handled).and_return(res_handled)
@@ -70,6 +72,12 @@ describe Vessel::Engine do
       expect(engine.scheduler).to have_received(:stop)
     end
 
+    it "stops the middleware scheduler when done" do
+      engine.run
+
+      expect(engine.middleware_scheduler).to have_received(:stop)
+    end
+
     it "ensures the scheduler is stopped" do
       error = StandardError.new
       allow(engine).to receive(:handle).and_raise(error)
@@ -77,6 +85,15 @@ describe Vessel::Engine do
 
       expect { engine.run }.to raise_error(error)
       expect(engine.scheduler).to have_received(:stop)
+    end
+
+    it "ensures the middleware scheduler is stopped" do
+      error = StandardError.new
+      allow(engine).to receive(:handle).and_raise(error)
+      engine.scheduler.queue << [page, request, error]
+
+      expect { engine.run }.to raise_error(error)
+      expect(engine.middleware_scheduler).to have_received(:stop)
     end
   end
 
@@ -90,7 +107,7 @@ describe Vessel::Engine do
     before do
       allow(crawler_class).to receive(:new).and_return(crawler)
       allow(crawler).to receive(:parse).and_yield(request).and_yield(result)
-      allow(engine.middleware).to receive(:call)
+      allow(engine.middleware_scheduler).to receive(:call)
       allow(engine.scheduler).to receive(:post)
       allow(response).to receive(:close)
     end
@@ -105,7 +122,7 @@ describe Vessel::Engine do
     it "calls block handler or middleware with #parse results" do
       engine.handle(response, request, error)
 
-      expect(engine.middleware).to have_received(:call).with(result)
+      expect(engine.middleware_scheduler).to have_received(:call).with(result)
     end
 
     it "schedules new requests emitted by #parse" do
