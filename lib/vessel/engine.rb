@@ -93,7 +93,7 @@ module Vessel
     end
 
     def schedule(*requests)
-      requests.size.times { increase(:req_enqueued) }
+      requests.flatten.size.times { increase(:req_enqueued) }
       scheduler.post(*requests)
     end
 
