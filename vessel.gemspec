@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
     "rubygems_mfa_required" => "true"
   }
 
-  s.required_ruby_version = ">= 2.6.0"
+  s.required_ruby_version = ">= 2.7.0"
 
   s.add_runtime_dependency "ferrum", "~> 0.12"
   s.add_runtime_dependency "mechanize", ">= 2.8.5"

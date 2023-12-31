@@ -5,22 +5,22 @@ on:
   - pull_request
 
 jobs:
-  test:
-
-    runs-on: ubuntu-latest
-
+  tests:
+    name: Tests
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: [ 2.7, '3.0', 3.1, 3.2 ]
-
+        ruby: [2.7, "3.0", 3.1, 3.2, 3.3]
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
-          bundler: latest
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
+
       - name: Run tests
         run: bundle exec rake
