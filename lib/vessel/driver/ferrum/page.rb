@@ -11,13 +11,14 @@ module Vessel
 
         attr_reader :page
 
-        def initialize(page)
+        def initialize(page, context:)
           super()
           @page = page
+          @context = context
         end
 
         def close
-          page.context.dispose if page.use_proxy?
+          @context.dispose if page.use_proxy?
           page.close
         end
 
