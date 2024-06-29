@@ -35,7 +35,7 @@ module Vessel
           options = {}
           options.merge!(proxy: proxy) if proxy
           page = browser.create_page(**options)
-          Page.new(page)
+          Page.new(page, context: browser.contexts[page.context_id])
         end
       end
     end
