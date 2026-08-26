@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Debug < Vessel::Middleware
-  def call(hash)
+  def call(hash, _fields)
     puts deep_sort(hash)
     hash
   end
@@ -9,7 +9,7 @@ class Debug < Vessel::Middleware
   private
 
   def deep_sort(hash)
-    sorted = hash.sort
+    sorted = hash.sort.to_h
     sorted.transform_values { |v| v.is_a?(Hash) ? deep_sort(v) : v }
   end
 end

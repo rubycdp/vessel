@@ -2,7 +2,7 @@
 
 class <%= @class_name %> < ApplicationCrawler
   domain "<%= @domain %>"
-  start_urls <SITE_URL>
+  start_urls "https://<%= @domain %>"
 
   def parse
   end
