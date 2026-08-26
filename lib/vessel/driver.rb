@@ -58,8 +58,11 @@ module Vessel
       response = Response.new(**request.to_handler)
       return [response, request] if request.stub?
 
-      if request.once && visited?(url)
-        Logger.info("Driver: rejecting #{url} visited #{@visited_urls[url]} time(s)")
+      # The url is registered before the page is created, otherwise threads
+      # racing for the same url all pass the check and visit it in parallel.
+      attempt = visit(url)
+      if request.once && attempt > 1
+        Logger.info("Driver: rejecting #{url} visited #{attempt - 1} time(s)")
         response.rejected = true
         return [response, request]
       end
@@ -67,17 +70,19 @@ module Vessel
       begin
         page = prepare_page(request)
         delay(request.delay)
-        @visited_urls.compute(url) { |v| v.to_i + 1 }
         Logger.info("Driver: visiting #{url}, last_request = #{@last_request.to_i}")
         page.go_to(url)
         @last_request = Time.now.to_i
-        response = Response.new(page: page, attempt: @visited_urls[url], **request.to_handler)
+        response = Response.new(page: page, attempt: attempt, **request.to_handler)
         [response, request]
       rescue StandardError => e
         if network_error?(e)
-          Logger.error("Driver: network issue for #{url}, attempt ##{@visited_urls[url]}")
+          Logger.error("Driver: network issue for #{url}, attempt ##{attempt}")
           Logger.error("Driver: #{e.class}: #{e.message}")
-          restart && retry if @visited_urls[url] < settings[:network_error_attempts]
+          if attempt < settings[:network_error_attempts]
+            attempt = visit(url)
+            restart && retry
+          end
         end
 
         [response, request, e]
@@ -86,8 +91,8 @@ module Vessel
 
     private
 
-    def visited?(url)
-      @visited_urls[url].positive?
+    def visit(url)
+      @visited_urls.compute(url) { |v| v.to_i + 1 }
     end
 
     def proxy_options
