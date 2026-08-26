@@ -29,10 +29,13 @@ module Vessel
       trap_sigint
       crawler_class.new.before_start
       crawler_class.new.before(stats)
-      Concurrent::TimerTask.execute(execution_interval: crawler_class::INFO_INTERVAL) { crawler_class.new.info(stats) }
+      @info_task = Concurrent::TimerTask.execute(execution_interval: crawler_class::INFO_INTERVAL) do
+        crawler_class.new.info(stats)
+      end
       schedule(crawler_class.start_requests)
       event_loop
     ensure
+      @info_task&.shutdown
       scheduler.stop
       middleware_scheduler.stop
       crawler_class.new.after(stats)
