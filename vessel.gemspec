@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "nokogiri", "~> 1.13"
   s.add_runtime_dependency "thor", "~> 1.2"
 
-  s.add_development_dependency "bundler", "~> 2.3"
   s.add_development_dependency "rake", "~> 13.0"
   s.add_development_dependency "rspec", "~> 3.11"
 end
