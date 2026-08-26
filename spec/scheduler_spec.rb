@@ -76,7 +76,7 @@ module Vessel
       it "quits the browser" do
         scheduler.stop
 
-        expect(scheduler.driver).to have_receive(:stop)
+        expect(scheduler.driver).to have_received(:stop)
       end
     end
   end
