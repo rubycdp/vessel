@@ -45,7 +45,7 @@ class QuotesToScrapeCom < Vessel::Cargo
     next_page = at_xpath("//li[@class='next']/a[@href]")
     return unless next_page
 
-    yield request(url: absolute_url(next_page.attribute(:href)), handler: :parse)
+    yield request(url: absolute_url(next_page[:href]), handler: :parse)
   end
 end
 
@@ -151,7 +151,10 @@ Two drivers ship with Vessel:
 * `:mechanize` - plain HTTP requests via
   [Mechanize](https://github.com/sparklemotion/mechanize), no browser and no
   JavaScript, which makes it much faster and lighter. `blacklist` and
-  `whitelist` are not supported by this driver.
+  `whitelist` are not supported by this driver, and an error status is raised
+  rather than parsed, so a `404` or a `500` is retried and ends up in
+  [`on_error`](#callbacks) instead of reaching your handler with
+  `response.status` set.
 
 You can disable headless mode by passing driver options at runtime:
 
@@ -318,6 +321,11 @@ By default the selectors run against the live page, which for the Ferrum driver
 means Chrome does the querying. Setting `Vessel.page_snapshot = true` makes them
 run against the Nokogiri document of the page's html instead, which is much
 faster when you extract a lot of nodes and don't need to interact with the page.
+
+Keep in mind that the nodes you get back come from the driver, `Ferrum::Node` or
+`Nokogiri::XML::Node`, and the two don't have the same api. Read the attributes
+with `node[:href]`, that one works everywhere, `node.attribute(:href)` only works
+on the live Chrome page.
 
 
 ## Fields
