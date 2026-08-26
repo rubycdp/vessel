@@ -8,18 +8,16 @@ Gem::Specification.new do |s|
   s.platform      = Gem::Platform::RUBY
   s.authors       = ["Dmitry Vorotilin"]
   s.email         = ["d.vorotilin@gmail.com"]
-  s.homepage      = "https://github.com/route/vessel"
+  s.homepage      = "https://github.com/rubycdp/vessel"
   s.summary       = "High-level web crawling framework"
   s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and "\
                     "extract structured data from their pages"
   s.license       = "MIT"
-  # Both ways of listing the files have to keep the dot files of the skeleton,
-  # they are the ones holding its otherwise empty directories.
   s.files         = Dir.chdir(__dir__) do
-    tracked = `git ls-files -z bin lib LICENSE README.md`.split("\x0")
+    tracked = `git ls-files -z bin lib CHANGELOG.md LICENSE README.md`.split("\x0")
     next tracked unless tracked.empty? # built outside of a git checkout
 
-    Dir.glob("{bin/*,lib/**/*,LICENSE,README.md}", File::FNM_DOTMATCH)
+    Dir.glob("{bin/*,lib/**/*,CHANGELOG.md,LICENSE,README.md}", File::FNM_DOTMATCH)
        .grep_v(%r{/\.\.?\z})
   end
   s.bindir        = "bin"
@@ -28,6 +26,7 @@ Gem::Specification.new do |s|
   s.metadata = {
     "homepage_uri" => "https://vessel.rubycdp.com/",
     "bug_tracker_uri" => "https://github.com/rubycdp/vessel/issues",
+    "changelog_uri" => "https://github.com/rubycdp/vessel/blob/main/CHANGELOG.md",
     "documentation_uri" => "https://github.com/rubycdp/vessel/blob/main/README.md",
     "source_code_uri" => "https://github.com/rubycdp/vessel",
     "rubygems_mfa_required" => "true"
