@@ -34,8 +34,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 3.1"
 
-  s.add_runtime_dependency "ferrum", ">= 0.15"
-  s.add_runtime_dependency "mechanize", ">= 2.8.5"
-  s.add_runtime_dependency "nokogiri", "~> 1.13"
-  s.add_runtime_dependency "thor", "~> 1.2"
+  s.add_dependency "addressable",     "~> 2.5"
+  s.add_dependency "concurrent-ruby", "~> 1.1"
+  s.add_dependency "ferrum",          "~> 0.18"
+  s.add_dependency "mechanize",       "~> 2.14"
+  s.add_dependency "nokogiri",        "~> 1.18"
+  s.add_dependency "thor",            "~> 1.5"
 end

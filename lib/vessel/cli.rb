@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "fileutils"
+require "pp"
 require "thor"
 
 module Vessel
