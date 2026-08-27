@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email         = ["d.vorotilin@gmail.com"]
   s.homepage      = "https://github.com/rubycdp/vessel"
   s.summary       = "High-level web crawling framework"
-  s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and "\
+  s.description   = "Vessel is a high-level web crawling framework, used to crawl websites and " \
                     "extract structured data from their pages"
   s.license       = "MIT"
   s.files         = Dir.chdir(__dir__) do

@@ -50,7 +50,6 @@ module Vessel
     def restart
       stop
       start
-      true
     end
 
     def go_to(request)
@@ -81,7 +80,8 @@ module Vessel
           Logger.error("Driver: #{e.class}: #{e.message}")
           if attempt < settings[:network_error_attempts]
             attempt = visit(url)
-            restart && retry
+            restart
+            retry
           end
         end
 

@@ -13,7 +13,7 @@ module Vessel
     end
 
     def load_crawlers
-      Dir["crawlers/**/*.rb"].sort.each { |file| require(file) }
+      Dir["crawlers/**/*.rb"].each { |file| require(file) }
     end
 
     def load_crawler(name)

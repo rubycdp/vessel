@@ -6,6 +6,7 @@ require "forwardable"
 module Vessel
   class MiddlewareScheduler
     extend Forwardable
+
     delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
     attr_reader :settings, :middlewares

@@ -16,7 +16,7 @@ module Vessel
       file = File.read(template_path)
       evaluated = ERB.new(file).result(binding)
       Logger.debug("Templator: creating file #{store_path}")
-      File.open(store_path, "w+") << evaluated
+      File.write(store_path, evaluated)
     end
 
     private

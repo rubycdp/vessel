@@ -6,18 +6,18 @@ module Vessel
   class Engine
     include Stats
 
-    def self.run(*args, &block)
-      new(*args, &block).tap(&:run)
+    def self.run(...)
+      new(...).tap(&:run)
     end
 
     attr_reader :crawler_class, :settings, :scheduler, :middleware_scheduler
 
-    def initialize(klass, &block)
+    def initialize(klass, &)
       @crawler_class = klass
       @settings = klass.settings
       @queue = SizedQueue.new(settings[:max_threads])
       @scheduler = Scheduler.new(@queue, settings)
-      @middleware_scheduler = MiddlewareScheduler.new(settings, &block)
+      @middleware_scheduler = MiddlewareScheduler.new(settings, &)
     end
 
     def run
@@ -61,7 +61,7 @@ module Vessel
       Logger.debug("Engine: crawler starts processing #{response.url} with :#{response.handler}")
       crawler.send(*args) do |*result|
         result = result.flatten
-        if result.all? { |i| i.is_a?(Request) }
+        if result.all?(Request)
           Logger.debug("Engine: :#{response.handler} enqueued requests #{result.map { |r| r.url.to_s }}")
           schedule(result)
         else

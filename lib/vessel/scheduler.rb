@@ -6,6 +6,7 @@ require "concurrent-ruby"
 module Vessel
   class Scheduler
     extend Forwardable
+
     delegate %i[scheduled_task_count completed_task_count queue_length] => :pool
 
     attr_reader :driver, :queue, :settings

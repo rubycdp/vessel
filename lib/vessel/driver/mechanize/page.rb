@@ -7,6 +7,7 @@ module Vessel
     module Mechanize
       class Page < Page
         extend Forwardable
+
         delegate %i[css at_css xpath at_xpath body] => :page
 
         attr_reader :mechanize

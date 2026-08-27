@@ -7,7 +7,7 @@ module Vessel
 
       def initialize(data = nil)
         @service = {}
-        @fields = data.to_h || {}
+        @fields = data.to_h
       end
 
       def []=(key, value)
@@ -26,8 +26,8 @@ module Vessel
         @fields.count
       end
 
-      def select(&block)
-        @fields.send(:select, &block)
+      def select(&)
+        @fields.send(:select, &)
       end
 
       def zip(value)
@@ -46,8 +46,8 @@ module Vessel
         @fields
       end
 
-      def each(&block)
-        @fields.each(&block)
+      def each(&)
+        @fields.each(&)
       end
     end
   end

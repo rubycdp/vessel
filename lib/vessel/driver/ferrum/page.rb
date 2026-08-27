@@ -7,6 +7,7 @@ module Vessel
     module Ferrum
       class Page < Page
         extend Forwardable
+
         delegate %i[css at_css xpath at_xpath body current_url go_to] => :page
 
         attr_reader :page

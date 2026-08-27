@@ -10,8 +10,8 @@ Bundler.require(Vessel.env.to_sym)
 require "lib/loader"
 Vessel.loader = ApplicationLoader.new
 
-Dir["config/environments/*.rb"].sort.each { |f| require f }
-Dir["config/environments/#{Vessel.env}/*.rb"].sort.each { |f| require f }
-Dir["config/middleware/*.rb"].sort.each { |f| require f }
-Dir["lib/helpers/*.rb"].sort.each { |f| require f }
-Dir["config/fields/*.rb"].sort.each { |f| require f }
+Dir["config/environments/*.rb"].each { |f| require f }
+Dir["config/environments/#{Vessel.env}/*.rb"].each { |f| require f }
+Dir["config/middleware/*.rb"].each { |f| require f }
+Dir["lib/helpers/*.rb"].each { |f| require f }
+Dir["config/fields/*.rb"].each { |f| require f }

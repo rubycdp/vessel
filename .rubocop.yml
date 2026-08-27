@@ -6,6 +6,11 @@ AllCops:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
+Naming/PredicateMethod:
+  AllowedMethods:
+    - page_snapshot
+    - prepare
+
 Naming/MethodParameterName:
   MinNameLength: 2
   AllowedNames:

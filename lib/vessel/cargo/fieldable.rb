@@ -11,10 +11,10 @@ module Vessel
         @fields ||= Fields.new
       end
 
-      def field(name, *rest, &block)
+      def field(name, *rest, &)
         options = rest.last.is_a?(Hash) ? rest.pop : {}
         service = options.delete(:service)
-        field = Field.new(name: name, value: options[:value], context: self, **options, &block)
+        field = Field.new(name: name, value: options[:value], context: self, **options, &)
         value = field.apply
         if service
           fields.service[name.to_sym] = value

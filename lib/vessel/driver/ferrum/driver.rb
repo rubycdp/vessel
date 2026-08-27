@@ -23,7 +23,7 @@ module Vessel
 
         def start
           driver_options = settings.fetch(:driver_options, {})
-          @browser = ::Ferrum::Browser.new(**DEFAULT_OPTIONS.merge(driver_options))
+          @browser = ::Ferrum::Browser.new(**DEFAULT_OPTIONS, **driver_options)
         end
 
         def stop

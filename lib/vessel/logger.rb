@@ -7,6 +7,7 @@ module Vessel
   class Logger
     class << self
       extend Forwardable
+
       delegate %i[debug info warn error] => :instance
 
       attr_writer :instance

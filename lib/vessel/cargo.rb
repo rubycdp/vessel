@@ -7,9 +7,9 @@ require "vessel/cargo/callbacks"
 
 module Vessel
   class Cargo
-    def self.run(settings = nil, &block)
+    def self.run(settings = nil, &)
       self.settings.merge!(Hash(settings))
-      Engine.run(self, &block)
+      Engine.run(self, &)
     end
 
     def self.build_request(url:, **options)
@@ -34,6 +34,7 @@ module Vessel
     include Fieldable
     extend Settings
     extend Forwardable
+
     delegate %i[at_css css at_xpath xpath absolute_url join_url
                 url url_encode url_decode uri_encode uri_decode
                 data attempt body raw] => :response

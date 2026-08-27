@@ -7,7 +7,8 @@ module Vessel
     describe ".domain" do
       # rubocop:disable Lint/ConstantDefinitionInBlock
       it "shows default", skip: true do
-        CrawlerWithoutDomain = Class.new(Vessel::Cargo)
+        class CrawlerWithoutDomain < Vessel::Cargo
+        end
         crawler = CrawlerWithoutDomain.new
 
         expect(crawler.domain).to eq("crawlerwithoutdomain")
