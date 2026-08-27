@@ -60,8 +60,10 @@ The first release since 2021, the internals were rewritten along the way.
 
 * Minimum Ruby is 3.1, the same as Ferrum.
 * Dependencies are up to date, Ferrum 0.18, Mechanize 2.14, Nokogiri 1.18 and
-  Thor 1.5. Addressable and concurrent-ruby are declared explicitly, they are
-  required directly and used to come in through Ferrum.
+  Thor 1.5. Addressable, concurrent-ruby and logger are declared explicitly,
+  they are required directly and used to come in through other gems. Logger is
+  no longer a default gem on Ruby 4.0, without the dependency requiring Vessel
+  raised a LoadError there.
 
 ## 0.2.0 (2021-03-09)
 
