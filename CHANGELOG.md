@@ -51,7 +51,7 @@ The first release since 2021, the internals were rewritten along the way.
 * Settings are deep cloned into the subclasses of a crawler.
 * The engine is idle only when every scheduled request and item is done.
 * Ferrum 0.15 and up with a proxy.
-* Minimum Ruby is 2.7.
+* Minimum Ruby is 3.1, the same as Ferrum.
 
 ## 0.2.0 (2021-03-09)
 
