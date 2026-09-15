@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "net/http"
 require "vessel/driver/page"
 require "vessel/driver/registry"
 
@@ -11,7 +12,6 @@ module Vessel
 
     def self.direct_network_errors
       [
-        ::Net::HTTP::Persistent::Error,
         ::Net::HTTPFatalError,
         ::Net::ReadTimeout,
         ::Net::OpenTimeout,

@@ -38,7 +38,6 @@ Gem::Specification.new do |s|
   s.add_dependency "concurrent-ruby", "~> 1.1"
   s.add_dependency "ferrum",          "~> 0.18"
   s.add_dependency "logger",          "~> 1.5"
-  s.add_dependency "mechanize",       "~> 2.14"
   s.add_dependency "nokogiri",        "~> 1.18"
   s.add_dependency "thor",            "~> 1.5"
 end

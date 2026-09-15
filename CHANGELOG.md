@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0 (unreleased)
+
+### Breaking
+
+* Mechanize is a sibling dependency, add `gem "mechanize"` to your Gemfile to
+  use the `:mechanize` driver. It used to be a hard dependency of Vessel and
+  pulled its transitive gems into every project, even the ones that crawl with
+  Ferrum or a driver of their own
+  ([#38](https://github.com/rubycdp/vessel/issues/38)).
+
+### Changed
+
+* Drivers are loaded when the crawler asks for them instead of when Vessel is
+  required, and an unknown driver or a missing driver gem raises
+  `Vessel::DriverNotFoundError` with the gem to install.
+
 ## 0.3.0 (2026-08-27)
 
 The first release since 2021, the internals were rewritten along the way.

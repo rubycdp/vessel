@@ -20,6 +20,14 @@ gem "vessel"
 
 The default `:ferrum` driver needs Chrome or Chromium installed and available in `PATH`.
 
+The `:mechanize` driver is optional and ships as a sibling dependency, so add it
+to your Gemfile when you want to use it:
+
+```ruby
+gem "mechanize"
+gem "vessel"
+```
+
 
 ## A look around
 
@@ -150,8 +158,9 @@ Two drivers ship with Vessel:
   certificate errors.
 * `:mechanize` - plain HTTP requests via
   [Mechanize](https://github.com/sparklemotion/mechanize), no browser and no
-  JavaScript, which makes it much faster and lighter. `blacklist` and
-  `whitelist` are not supported by this driver, and an error status is raised
+  JavaScript, which makes it much faster and lighter. The gem is not installed
+  with Vessel, add `gem "mechanize"` to your Gemfile to use this driver.
+  `blacklist` and `whitelist` are not supported by it, and an error status is raised
   rather than parsed, so a `404` or a `500` is retried and ends up in
   [`on_error`](#callbacks) instead of reaching your handler with
   `response.status` set.

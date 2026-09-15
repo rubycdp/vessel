@@ -7,6 +7,10 @@ module Vessel
   class Driver
     module Mechanize
       class Driver < ::Vessel::Driver
+        def self.direct_network_errors
+          @direct_network_errors ||= (super + [::Net::HTTP::Persistent::Error]).freeze
+        end
+
         def self.indirect_network_errors
           @indirect_network_errors ||= (super + [::Mechanize::ResponseCodeError]).freeze
         end

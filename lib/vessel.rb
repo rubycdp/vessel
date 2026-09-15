@@ -5,6 +5,8 @@ module Vessel
 
   class NotImplementedError < Error; end
 
+  class DriverNotFoundError < Error; end
+
   class << self
     attr_writer :loader, :page_snapshot
 
@@ -37,8 +39,6 @@ require "vessel/response"
 require "vessel/version"
 require "vessel/cargo"
 require "vessel/driver"
-require "vessel/driver/ferrum/driver"
-require "vessel/driver/mechanize/driver"
 require "vessel/templator"
 require "vessel/loader"
 require "vessel/logger"
