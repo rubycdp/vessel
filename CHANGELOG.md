@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (unreleased)
+## 0.3.0 (2026-08-27)
 
 The first release since 2021, the internals were rewritten along the way.
 
