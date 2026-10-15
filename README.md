@@ -2,6 +2,11 @@
 
 #### Fast as Chrome, dead simple and yet extendable.
 
+<img align="right"
+     width="160" height="160"
+     alt="Vessel logo"
+     src="https://raw.githubusercontent.com/rubycdp/vessel/main/logo.svg?sanitize=true">
+
 Vessel is a Ruby high-level web crawling framework. It can be used in a wide range of scenarios, like data
 mining, monitoring or historical archival. Pages are fetched by a pluggable
 driver: [Ferrum](https://github.com/rubycdp/ferrum) (a real Chrome, the default)
@@ -9,6 +14,8 @@ or [Mechanize](https://github.com/sparklemotion/mechanize) (plain HTTP, no
 browser). For automated testing we recommend
 [Cuprite](https://github.com/rubycdp/cuprite).
 
+
+<br clear="right">
 
 ## Install
 

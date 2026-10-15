@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect x="10" y="10" width="86" height="86" rx="10" fill="#000"></rect>
+  <rect x="4" y="4" width="86" height="86" rx="10" fill="#2fc6ff" stroke="#000" stroke-width="4"></rect>
+  <text x="13" y="22" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11" font-weight="700" fill="#000">03</text>
+  <text x="81" y="22" text-anchor="end" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="9" font-weight="700" fill="#000">Cargo</text>
+  <text x="47" y="72" text-anchor="middle" font-family="'Arial Black', 'Bricolage Grotesque', Impact, sans-serif" font-size="42" font-weight="900" fill="#000" letter-spacing="-1">Vs</text>
+</svg>
