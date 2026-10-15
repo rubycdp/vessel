@@ -1,5 +1,7 @@
 # Vessel - high-level web crawling framework
 
+## [Documentation](https://docs.rubycdp.com/docs/vessel/introduction)
+
 #### Fast as Chrome, dead simple and yet extendable.
 
 <img align="right"
