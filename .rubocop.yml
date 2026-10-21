@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
   NewCops: enable
   SuggestExtensions: false
 
@@ -23,6 +23,9 @@ Naming/FileName:
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Style/ArgumentsForwarding:
+  UseAnonymousForwarding: false
 
 Style/MultilineBlockChain:
   Exclude:
