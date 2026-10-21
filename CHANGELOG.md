@@ -10,6 +10,8 @@
   Ferrum or a driver of their own
   ([#38](https://github.com/rubycdp/vessel/issues/38)).
 
+* Ruby 3.1 support is dropped, Vessel requires Ruby 3.2 or newer.
+
 ### Changed
 
 * Drivers are loaded when the crawler asks for them instead of when Vessel is
